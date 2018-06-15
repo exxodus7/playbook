@@ -6,8 +6,7 @@
 
 package com.schroetech.game;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,7 +15,7 @@ import java.util.LinkedList;
 public class TabletopSession {
     
     IGame game = null;
-    Collection<IPlayer> players = new LinkedList<>();
+    ArrayList<IPlayer> players = new ArrayList<>();
     
     public void playGame() {
         if (game == null) {
@@ -29,7 +28,20 @@ public class TabletopSession {
             return;
         }
    
-        game.setup();
+        game.setup(players);
+        
+        while(!game.isGameOver()) {
+            for (IPlayer player : players) {
+                if (game.isGameOver())
+                        break;
+                
+                player.takeTurn(game);
+                game.printBoardState();
+            }
+        }
+        
+        System.out.println("Game over!");
+        game.printResults();
     }
     
     public void setGame(IGame newGame) {
