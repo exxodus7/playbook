@@ -11,4 +11,18 @@ public interface IPlayer {
      * @param game The current state of the game being played.SS
      */
     public void takeTurn(IGame game);
+
+    /**
+     * Returns the name of the player.
+     *
+     * @return String representing the name of the player.
+     */
+    public String getName();
+    
+    /**
+     * Sets the player's name;
+     *
+     * @param newName String representing the player's name.
+     */
+    public void setName(String newName);
 }

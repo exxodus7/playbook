@@ -1,12 +1,12 @@
 package com.schroetech.game.tictactoe.player;
 
-import com.schroetech.game.IPlayer;
+import com.schroetech.game.AbstractPlayer;
 import com.schroetech.game.tictactoe.object.TicTacToePlayerMarker;
 
 /**
  * Abstract class representing a player who plays TicTacToe.
  */
-public abstract class AbstractTicTacToePlayer implements IPlayer {
+public abstract class AbstractTicTacToePlayer extends AbstractPlayer {
 
     private TicTacToePlayerMarker myMarker = null;
 

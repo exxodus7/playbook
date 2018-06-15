@@ -5,10 +5,11 @@
  */
 package com.schroetech.tabletoptestplatform;
 
-import com.schroetech.game.TabletopSession;
+import com.schroetech.game.IPlayer;
 import com.schroetech.game.tictactoe.TicTacToe;
 import com.schroetech.game.tictactoe.player.JustinAITicTacToePlayer;
 import com.schroetech.game.tictactoe.player.RandomTicTacToePlayer;
+import com.schroetech.tabletoptestplatform.session.MultiTabletopSession;
 
 /**
  * Platform for running tabletop game sessions, usually where at least one of
@@ -23,13 +24,19 @@ public class TabletopTestPlatform {
 
         System.out.println("Welcome to the Tabletop Test Platform!");
         System.out.println("Today we will be playing Tic Tac Toe, whether you like it or not.");
+        
+        IPlayer playerA = new RandomTicTacToePlayer();
+        playerA.setName("Bob");
+        IPlayer playerB = new JustinAITicTacToePlayer();
+        playerB.setName("Justin");
 
-        TabletopSession session = new TabletopSession();
+        MultiTabletopSession session = new MultiTabletopSession();
         session.setGame(new TicTacToe());
-        session.addPlayer(new RandomTicTacToePlayer());
-        session.addPlayer(new JustinAITicTacToePlayer());
-
-        session.playGame();
+        session.addPlayer(playerA);
+        session.addPlayer(playerB);
+        session.setNumberOfGames(10000);
+        
+        session.playGames();
     }
 
 }

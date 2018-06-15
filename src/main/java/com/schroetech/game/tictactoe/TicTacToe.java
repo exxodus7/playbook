@@ -12,21 +12,22 @@ import java.util.ArrayList;
 public class TicTacToe extends AbstractGame {
 
     // Private variables
-    private int moveCount = 0;
     private static final int NUM_PLAYERS = 2;
-    private boolean gameOver = false;
-    private TicTacToePlayerMarker winner = null;
+    private int moveCount;
+    private boolean gameOver;
+    private TicTacToePlayerMarker winnerMarker;
     private TicTacToePlayerMarker[][] board = null;
 
     @Override
     public void setup(ArrayList<IPlayer> players) {
-        
+
         ((AbstractTicTacToePlayer) players.get(0)).setPlayerMarker(TicTacToePlayerMarker.X);
-        System.out.println("X's will be controlled by " + players.get(0).getClass());
         ((AbstractTicTacToePlayer) players.get(1)).setPlayerMarker(TicTacToePlayerMarker.O);
-        System.out.println("O's will be controlled by " + players.get(1).getClass());
 
         board = new TicTacToePlayerMarker[3][3];
+        moveCount = 0;
+        gameOver = false;
+        winnerMarker = null;
     }
 
     /**
@@ -71,6 +72,17 @@ public class TicTacToe extends AbstractGame {
         return false;
     }
 
+    @Override
+    public IPlayer getWinner(ArrayList<IPlayer> players) {
+        if (this.getWinnerMarker() == null) {
+            return null;
+        } else if (((AbstractTicTacToePlayer) players.get(0)).getPlayerMarker().equals(this.getWinnerMarker())) {
+            return players.get(0);
+        } else {
+            return players.get(1);
+        }
+    }
+
     /**
      * Checks if the move resulted in victory. If it did, game state is updated
      * to reflect that.
@@ -83,31 +95,31 @@ public class TicTacToe extends AbstractGame {
 
         // check column
         if (isWinningCombo(board[row][0], board[row][1], board[row][2], playerMarker)) {
-            setWinner(playerMarker);
+            setWinnerMarker(playerMarker);
         }
 
         // check row
         if (isWinningCombo(board[0][col], board[1][col], board[2][col], playerMarker)) {
-            setWinner(playerMarker);
+            setWinnerMarker(playerMarker);
         }
 
         // check diagonal
         if (row == col) {
             if (isWinningCombo(board[0][0], board[1][1], board[2][2], playerMarker)) {
-                setWinner(playerMarker);
+                setWinnerMarker(playerMarker);
             }
         }
 
         // check reverse diagonal
         if (row + col == 2) {
             if (isWinningCombo(board[0][2], board[1][1], board[2][0], playerMarker)) {
-                setWinner(playerMarker);
+                setWinnerMarker(playerMarker);
             }
         }
 
         //check draw
         if (!gameOver && moveCount == 9) {
-            setWinner(null);
+            setWinnerMarker(null);
         }
     }
 
@@ -119,11 +131,12 @@ public class TicTacToe extends AbstractGame {
             return;
         }
 
-        if (getWinner() != null) {
-            System.out.println(getWinner().toString() + "'s win the game!");
+        if (getWinnerMarker() != null) {
+            System.out.println(getWinnerMarker().toString() + "'s win the game!");
         } else {
             System.out.println("The game ended in a draw.");
         }
+
         System.out.println("Final board setup:");
         printBoardState();
     }
@@ -144,9 +157,9 @@ public class TicTacToe extends AbstractGame {
      *
      * @param player PlayerMarker of the winning player.S
      */
-    private void setWinner(TicTacToePlayerMarker player) {
+    private void setWinnerMarker(TicTacToePlayerMarker player) {
         gameOver = true;
-        winner = player;
+        winnerMarker = player;
     }
 
     /**
@@ -154,8 +167,8 @@ public class TicTacToe extends AbstractGame {
      *
      * @return PlayerMarker of the winning player.
      */
-    public TicTacToePlayerMarker getWinner() {
-        return winner;
+    public TicTacToePlayerMarker getWinnerMarker() {
+        return winnerMarker;
     }
 
     @Override
@@ -186,11 +199,7 @@ public class TicTacToe extends AbstractGame {
      * otherwise.
      */
     private boolean isWinningCombo(TicTacToePlayerMarker marker1, TicTacToePlayerMarker marker2, TicTacToePlayerMarker marker3, TicTacToePlayerMarker curPlayer) {
-        if (curPlayer.equals(marker1) && curPlayer.equals(marker2) && curPlayer.equals(marker3)) {
-            return true;
-        }
-
-        return false;
+        return curPlayer.equals(marker1) && curPlayer.equals(marker2) && curPlayer.equals(marker3);
     }
 
     /**

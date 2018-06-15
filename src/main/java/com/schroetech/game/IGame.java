@@ -37,6 +37,14 @@ public interface IGame {
     public boolean isGameOver();
 
     /**
+     * Returns the game winner, or null if no winner.
+     *
+     * @param players List of the players taking part in the game.
+     * @return IPlayer representing the winner.
+     */
+    public IPlayer getWinner(ArrayList<IPlayer> players);
+
+    /**
      * Prints the results of the game to the console.
      */
     public void printResults();
