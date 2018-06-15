@@ -139,14 +139,15 @@ public class JustinAITicTacToePlayer extends AbstractTicTacToePlayer {
             boolean cellIncluded = false;
             boolean noOtherGuy = true;
             for (int c = 0; c < 3; c++) {
-                if (formations[f][c] == cell) {
+                if (formations[f][c][0]==cell[0] && formations[f][c][1]==cell[1]) {
                     cellIncluded = true;
                 }
                 if (board[formations[f][c][0]][formations[f][c][1]] == otherMarker) {
                     noOtherGuy = false;
                 }
             }
-            if (cellIncluded & noOtherGuy) {
+            
+            if (cellIncluded && noOtherGuy) {
                 numOpenings++;
             }
         }

@@ -20,7 +20,7 @@ public class TicTacToe extends AbstractGame {
 
     @Override
     public void setup(ArrayList<IPlayer> players) {
-
+        
         ((AbstractTicTacToePlayer) players.get(0)).setPlayerMarker(TicTacToePlayerMarker.X);
         System.out.println("X's will be controlled by " + players.get(0).getClass());
         ((AbstractTicTacToePlayer) players.get(1)).setPlayerMarker(TicTacToePlayerMarker.O);

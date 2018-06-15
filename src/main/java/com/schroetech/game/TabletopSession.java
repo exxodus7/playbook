@@ -2,6 +2,8 @@ package com.schroetech.game;
 
 import com.schroetech.game.tictactoe.player.AbstractTicTacToePlayer;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Facilitates a game session. Specifically, drives the interactions between the
@@ -39,6 +41,11 @@ public class TabletopSession {
 
                 player.takeTurn(game);
                 game.printBoardState();
+                try {
+                    Thread.sleep(600);
+                } catch (InterruptedException ex) {
+                    System.out.println("ummm... awkward");
+                }
             }
         }
 
