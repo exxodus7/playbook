@@ -1,27 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.schroetech.game.tictactoe.player;
 
 import com.schroetech.game.IPlayer;
-import com.schroetech.game.tictactoe.object.PlayerMarker;
+import com.schroetech.game.tictactoe.object.TicTacToePlayerMarker;
 
 /**
- *
- * @author lauren
+ * Abstract class representing a player who plays TicTacToe.
  */
 public abstract class AbstractTicTacToePlayer implements IPlayer {
-    
-    private PlayerMarker myMarker = null;
-    
-    public void setPlayerMarker(PlayerMarker newMarker) {
+
+    private TicTacToePlayerMarker myMarker = null;
+
+    /**
+     * Sets the marker that this player will use.
+     *
+     * @param newMarker The marker that this player will use.
+     */
+    public void setPlayerMarker(TicTacToePlayerMarker newMarker) {
         myMarker = newMarker;
     }
-    
-    public PlayerMarker getPlayerMarker() {
+
+    /**
+     * Gets the marker that this player will use.
+     *
+     * @return The marker that this player will use.
+     */
+    public TicTacToePlayerMarker getPlayerMarker() {
         return myMarker;
     }
 }

@@ -6,17 +6,10 @@
 
 package com.schroetech.game.tictactoe.player;
 
-import com.schroetech.game.IGame;
-
 /**
  *
  * @author lauren
  */
 public class JustinAITicTacToePlayer extends AbstractTicTacToePlayer {
-
-    @Override
-    public void takeTurn(IGame game) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }

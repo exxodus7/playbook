@@ -1,16 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.schroetech.game;
 
 /**
- *
- * @author lauren
+ * Common interface for all player objects.
  */
 public interface IPlayer {
-    
+
+    /**
+     * Takes a turn of the game.
+     *
+     * @param game The current state of the game being played.SS
+     */
     public void takeTurn(IGame game);
 }
