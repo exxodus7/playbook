@@ -8,6 +8,7 @@ package com.schroetech.tabletoptestplatform;
 
 import com.schroetech.game.TabletopSession;
 import com.schroetech.game.tictactoe.TicTacToe;
+import com.schroetech.game.tictactoe.player.SimpleTicTacToePlayer;
 
 /**
  *
@@ -25,7 +26,7 @@ public class TabletopTestPlatform {
         
         TabletopSession session = new TabletopSession();
         session.setGame(new TicTacToe());
-        
+        session.addPlayer(new SimpleTicTacToePlayer());
     }
     
 }

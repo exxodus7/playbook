@@ -10,6 +10,6 @@ package com.schroetech.game.tictactoe.player;
  *
  * @author lauren
  */
-public class SimplePlayer extends AbstractTicTacToePlayer {
+public class SimpleTicTacToePlayer extends AbstractTicTacToePlayer {
     
 }
