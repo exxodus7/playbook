@@ -12,4 +12,5 @@ package com.schroetech.game;
  */
 public interface IPlayer {
     
+    public void takeTurn(IGame game);
 }

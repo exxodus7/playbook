@@ -7,11 +7,21 @@
 package com.schroetech.game.tictactoe.player;
 
 import com.schroetech.game.IPlayer;
+import com.schroetech.game.tictactoe.object.PlayerMarker;
 
 /**
  *
  * @author lauren
  */
-public class AbstractTicTacToePlayer implements IPlayer {
+public abstract class AbstractTicTacToePlayer implements IPlayer {
     
+    private PlayerMarker myMarker = null;
+    
+    public void setPlayerMarker(PlayerMarker newMarker) {
+        myMarker = newMarker;
+    }
+    
+    public PlayerMarker getPlayerMarker() {
+        return myMarker;
+    }
 }

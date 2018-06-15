@@ -12,8 +12,4 @@ package com.schroetech.game;
  */
 public abstract class AbstractGame implements IGame {
     
-    @Override
-    public void setup() {
-        // does nothing.
-    }
 }
