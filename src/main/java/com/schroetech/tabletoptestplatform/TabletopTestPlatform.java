@@ -6,6 +6,9 @@
 
 package com.schroetech.tabletoptestplatform;
 
+import com.schroetech.game.TabletopSession;
+import com.schroetech.game.tictactoe.TicTacToe;
+
 /**
  *
  * @author lauren
@@ -16,7 +19,13 @@ public class TabletopTestPlatform {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        
+        System.out.println("Welcome to the Tabletop Test Platform!");
+        System.out.println("Today we will be playing Tic Tac Toe, whether you like it or not.");
+        
+        TabletopSession session = new TabletopSession();
+        session.setGame(new TicTacToe());
+        
     }
     
 }

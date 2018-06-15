@@ -1,5 +1,6 @@
 package com.schroetech.game.tictactoe;
 
+import com.schroetech.game.tictactoe.object.PlayerMarker;
 import com.schroetech.game.AbstractGame;
 
 /**

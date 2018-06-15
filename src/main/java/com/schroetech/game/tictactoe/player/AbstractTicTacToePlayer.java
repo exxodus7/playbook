@@ -4,12 +4,14 @@
  * and open the template in the editor.
  */
 
-package com.schroetech.game.tictactoe;
+package com.schroetech.game.tictactoe.player;
+
+import com.schroetech.game.IPlayer;
 
 /**
  *
  * @author lauren
  */
-public class HumanTicTacToePlayer extends AbstractTicTacToePlayer {
+public class AbstractTicTacToePlayer implements IPlayer {
     
 }

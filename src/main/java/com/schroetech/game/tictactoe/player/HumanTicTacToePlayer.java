@@ -4,13 +4,12 @@
  * and open the template in the editor.
  */
 
-package com.schroetech.game.tictactoe;
+package com.schroetech.game.tictactoe.player;
 
 /**
  *
  * @author lauren
  */
-public enum PlayerMarker {
-    X,
-    O;
+public class HumanTicTacToePlayer extends AbstractTicTacToePlayer {
+    
 }

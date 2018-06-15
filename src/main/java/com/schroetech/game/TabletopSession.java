@@ -13,7 +13,7 @@ import java.util.LinkedList;
  *
  * @author lauren
  */
-public class Session {
+public class TabletopSession {
     
     IGame game = null;
     Collection<IPlayer> players = new LinkedList<>();
