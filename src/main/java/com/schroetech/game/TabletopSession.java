@@ -6,6 +6,7 @@
 
 package com.schroetech.game;
 
+import com.schroetech.game.tictactoe.player.AbstractTicTacToePlayer;
 import java.util.ArrayList;
 
 /**
