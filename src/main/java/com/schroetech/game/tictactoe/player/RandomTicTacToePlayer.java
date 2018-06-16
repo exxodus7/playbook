@@ -2,6 +2,7 @@ package com.schroetech.game.tictactoe.player;
 
 import com.schroetech.game.IGame;
 import com.schroetech.game.tictactoe.TicTacToe;
+import com.schroetech.game.tictactoe.object.TicTacToeSpace;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -11,7 +12,7 @@ import java.util.Random;
 public class RandomTicTacToePlayer extends AbstractTicTacToePlayer {
 
     @Override
-    public void takeTurn(IGame game) {
+    public TicTacToeSpace takeTurn(IGame game) {
         ArrayList<int[]> possibilities = new ArrayList();
         TicTacToe ticTacToe = (TicTacToe) game;
         for (int i = 0; i < 3; i++) {

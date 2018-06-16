@@ -20,17 +20,17 @@ public class TicTacToe extends AbstractGame {
     private boolean gameOver;
     private AbstractTicTacToePlayer winner;
     private TicTacToePlayerMarker[][] board = null;
-    private Map<TicTacToePlayerMarker, IPlayer> pieceAssignment;
+    private Map<String, TicTacToePlayerMarker> playerAssignment;
 
     @Override
     public void setup(ArrayList<IPlayer> players) {
 
-        pieceAssignment = new HashMap();
+        playerAssignment = new HashMap();
         // TODO: Make this random.
         Random randomNumberGenerator = new Random();
         int firstPlayer = randomNumberGenerator.nextInt(2);
-        pieceAssignment.put(TicTacToePlayerMarker.X, this.getPlayers().get(firstPlayer));
-        pieceAssignment.put(TicTacToePlayerMarker.O, this.getPlayers().get(1-firstPlayer));
+        playerAssignment.put(this.getPlayers().get(firstPlayer).getId(), TicTacToePlayerMarker.X);
+        playerAssignment.put(this.getPlayers().get(1-firstPlayer).getId(), TicTacToePlayerMarker.O);
 
         board = new TicTacToePlayerMarker[3][3];
         moveCount = 0;
@@ -70,6 +70,7 @@ public class TicTacToe extends AbstractGame {
      * @return true if the move was legal, false otherwise.
      */
     public boolean move(int row, int col, TicTacToePlayerMarker playerMarker) {
+        TicTacToeSpace moveSpace = 
         if (isValidMove(row, col)) {
             board[row][col] = playerMarker;
             moveCount++;
