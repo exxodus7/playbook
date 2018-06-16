@@ -25,7 +25,7 @@ public class RandomTicTacToePlayer extends AbstractTicTacToePlayer {
         
         Random randomNumberGenerator = new Random();
         int[] move = possibilities.get(randomNumberGenerator.nextInt(possibilities.size()));
-        ticTacToe.move(move[0], move[1], this.getPlayerMarker());
+        ticTacToe.move(move[0], move[1]);
     }
 
 }

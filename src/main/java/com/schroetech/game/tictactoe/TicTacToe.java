@@ -7,6 +7,7 @@ import com.schroetech.game.tictactoe.player.AbstractTicTacToePlayer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Implemetation of the game Tic Tac Toe.S
@@ -26,8 +27,10 @@ public class TicTacToe extends AbstractGame {
 
         pieceAssignment = new HashMap();
         // TODO: Make this random.
-        pieceAssignment.put(TicTacToePlayerMarker.X, this.getPlayers().get(0));
-        pieceAssignment.put(TicTacToePlayerMarker.O, this.getPlayers().get(1));
+        Random randomNumberGenerator = new Random();
+        int firstPlayer = randomNumberGenerator.nextInt(2);
+        pieceAssignment.put(TicTacToePlayerMarker.X, this.getPlayers().get(firstPlayer));
+        pieceAssignment.put(TicTacToePlayerMarker.O, this.getPlayers().get(1-firstPlayer));
 
         board = new TicTacToePlayerMarker[3][3];
         moveCount = 0;

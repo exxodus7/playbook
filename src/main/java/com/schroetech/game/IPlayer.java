@@ -25,4 +25,6 @@ public interface IPlayer {
      * @param newName String representing the player's name.
      */
     public void setName(String newName);
+    
+    public String getId();
 }

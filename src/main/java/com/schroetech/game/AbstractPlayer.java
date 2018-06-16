@@ -5,6 +5,8 @@
  */
 package com.schroetech.game;
 
+import java.util.UUID;
+
 /**
  *
  * @author lauren
@@ -12,6 +14,11 @@ package com.schroetech.game;
 public abstract class AbstractPlayer implements IPlayer {
 
     private String name = "";
+    private String id;
+    
+    public AbstractPlayer() {
+        id = UUID.randomUUID().toString();
+    }
     
     @Override
     public String getName() {
@@ -21,5 +28,10 @@ public abstract class AbstractPlayer implements IPlayer {
     @Override
     public void setName(String newName) {
         name = newName;
+    }
+    
+    @Override
+    public String getId() {
+        return id;
     }
 }
