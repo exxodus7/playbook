@@ -1,8 +1,7 @@
 package com.schroetech.game.tictactoe.player;
 
-import com.schroetech.game.IGame;
-import com.schroetech.game.tictactoe.TicTacToe;
 import com.schroetech.game.tictactoe.object.TicTacToePlayerMarker;
+import com.schroetech.game.tictactoe.object.TicTacToeSpace;
 
 /**
  *
@@ -11,14 +10,10 @@ import com.schroetech.game.tictactoe.object.TicTacToePlayerMarker;
 public class JustinAITicTacToePlayer extends AbstractTicTacToePlayer {
 
     @Override
-    public void takeTurn(IGame game) {
-        TicTacToe ticTacToe = (TicTacToe) game;
-        TicTacToePlayerMarker[][] board = ticTacToe.getBoard();
+    public TicTacToeSpace takeTurn(TicTacToePlayerMarker[][] board, TicTacToePlayerMarker myMarker) {
 
-        //set playerMarkers (X or O)
-        TicTacToePlayerMarker myGuy = this.getPlayerMarker();
         TicTacToePlayerMarker otherGuy;
-        if (myGuy == TicTacToePlayerMarker.X) {
+        if (myMarker == TicTacToePlayerMarker.X) {
             otherGuy = TicTacToePlayerMarker.O;
         } else {
             otherGuy = TicTacToePlayerMarker.X;
@@ -31,19 +26,17 @@ public class JustinAITicTacToePlayer extends AbstractTicTacToePlayer {
 
         //check to see if win possible
         for (int f = 0; f < 8; f++) {
-            int firstMove = isWinnable(board, formations[f], myGuy, otherGuy);
+            int firstMove = isWinnable(board, formations[f], myMarker, otherGuy);
             if (firstMove > -1) {
-                ticTacToe.move(formations[f][firstMove][0], formations[f][firstMove][1], myGuy);
-                return;
+                return new TicTacToeSpace(formations[f][firstMove][0], formations[f][firstMove][1]);
             }
         }
 
         //check to see if opponent win possible
         for (int f = 0; f < 8; f++) {
-            int secondMove = isWinnable(board, formations[f], otherGuy, myGuy);
+            int secondMove = isWinnable(board, formations[f], otherGuy, myMarker);
             if (secondMove > -1) {
-                ticTacToe.move(formations[f][secondMove][0], formations[f][secondMove][1], myGuy);
-                return;
+                return new TicTacToeSpace(formations[f][secondMove][0], formations[f][secondMove][1]);
             }
         }
 
@@ -51,8 +44,7 @@ public class JustinAITicTacToePlayer extends AbstractTicTacToePlayer {
         if (board[1][1] == null) {
             int[] middle = {1, 1};
             if (numUnblocked(middle, board, formations, otherGuy) > 0) {
-                ticTacToe.move(1, 1, myGuy);
-                return;
+                return new TicTacToeSpace(1, 1);
             }
         }
 
@@ -72,8 +64,7 @@ public class JustinAITicTacToePlayer extends AbstractTicTacToePlayer {
         if (maxOpen > 0) {
             for (int c = 0; c < 4; c++) {
                 if (numOpen[c] == maxOpen) {
-                    ticTacToe.move(corners[c][0], corners[c][1], myGuy);
-                    return;
+                    return new TicTacToeSpace(corners[c][0], corners[c][1]);
                 }
             }
         }
@@ -94,8 +85,7 @@ public class JustinAITicTacToePlayer extends AbstractTicTacToePlayer {
         if (maxOpenSides > 0) {
             for (int c = 0; c < 4; c++) {
                 if (numOpenSides[c] == maxOpenSides) {
-                    ticTacToe.move(sides[c][0], sides[c][1], myGuy);
-                    return;
+                    return new TicTacToeSpace(sides[c][0], sides[c][1]);
                 }
             }
         }
@@ -104,11 +94,12 @@ public class JustinAITicTacToePlayer extends AbstractTicTacToePlayer {
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 3; c++) {
                 if (board[r][c] == null) {
-                    ticTacToe.move(r, c, myGuy);
-                    return;
+                    return new TicTacToeSpace(r, c);
                 }
             }
         }
+        
+        return null;
     }
 
     //method to check if a formation is near winning
@@ -139,14 +130,14 @@ public class JustinAITicTacToePlayer extends AbstractTicTacToePlayer {
             boolean cellIncluded = false;
             boolean noOtherGuy = true;
             for (int c = 0; c < 3; c++) {
-                if (formations[f][c][0]==cell[0] && formations[f][c][1]==cell[1]) {
+                if (formations[f][c][0] == cell[0] && formations[f][c][1] == cell[1]) {
                     cellIncluded = true;
                 }
                 if (board[formations[f][c][0]][formations[f][c][1]] == otherMarker) {
                     noOtherGuy = false;
                 }
             }
-            
+
             if (cellIncluded && noOtherGuy) {
                 numOpenings++;
             }

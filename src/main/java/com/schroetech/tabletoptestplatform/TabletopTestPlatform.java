@@ -9,7 +9,7 @@ import com.schroetech.game.IPlayer;
 import com.schroetech.game.tictactoe.TicTacToe;
 import com.schroetech.game.tictactoe.player.JustinAITicTacToePlayer;
 import com.schroetech.game.tictactoe.player.RandomTicTacToePlayer;
-import com.schroetech.tabletoptestplatform.session.MultiTabletopSession;
+import com.schroetech.tabletoptestplatform.session.TabletopSession;
 
 /**
  * Platform for running tabletop game sessions, usually where at least one of
@@ -27,16 +27,16 @@ public class TabletopTestPlatform {
         
         IPlayer playerA = new RandomTicTacToePlayer();
         playerA.setName("Bob");
-        IPlayer playerB = new JustinAITicTacToePlayer();
+        IPlayer playerB = new RandomTicTacToePlayer();
         playerB.setName("Justin");
 
-        MultiTabletopSession session = new MultiTabletopSession();
-        session.setGame(new TicTacToe());
+        TabletopSession session = new TabletopSession();
+        session.setGameType(TicTacToe.class.getName());
         session.addPlayer(playerA);
         session.addPlayer(playerB);
-        session.setNumberOfGames(10000);
+        session.setNumberOfGames(1000);
         
-        session.playGames();
+        session.startSession();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.schroetech.game.tictactoe.player;
 
 import com.schroetech.game.AbstractPlayer;
+import com.schroetech.game.tictactoe.object.TicTacToePlayerMarker;
 import com.schroetech.game.tictactoe.object.TicTacToeSpace;
 
 /**
@@ -8,5 +9,5 @@ import com.schroetech.game.tictactoe.object.TicTacToeSpace;
  */
 public abstract class AbstractTicTacToePlayer extends AbstractPlayer {
 
-    public abstract TicTacToeSpace takeTurn();
+    public abstract TicTacToeSpace takeTurn(TicTacToePlayerMarker[][] board, TicTacToePlayerMarker myMarker);
 }

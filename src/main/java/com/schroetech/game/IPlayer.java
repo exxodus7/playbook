@@ -6,13 +6,6 @@ package com.schroetech.game;
 public interface IPlayer {
 
     /**
-     * Takes a turn of the game.
-     *
-     * @param game The current state of the game being played.SS
-     */
-    public void takeTurn(IGame game);
-
-    /**
      * Returns the name of the player.
      *
      * @return String representing the name of the player.

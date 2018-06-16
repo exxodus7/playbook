@@ -3,39 +3,59 @@ package com.schroetech.game.tictactoe;
 import com.schroetech.game.tictactoe.object.TicTacToePlayerMarker;
 import com.schroetech.game.AbstractGame;
 import com.schroetech.game.IPlayer;
+import com.schroetech.game.tictactoe.object.TicTacToeSpace;
 import com.schroetech.game.tictactoe.player.AbstractTicTacToePlayer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 /**
- * Implemetation of the game Tic Tac Toe.S
+ * Implemetation of the game Tic Tac Toe.
  */
 public class TicTacToe extends AbstractGame {
 
     // Private variables
     private static final int NUM_PLAYERS = 2;
-    private int moveCount;
-    private boolean gameOver;
-    private AbstractTicTacToePlayer winner;
-    private TicTacToePlayerMarker[][] board = null;
+    private int moveCount = 0;
+    private boolean gameOver = false;
+    private String winningPlayerId;
+    private final TicTacToePlayerMarker[][] board = new TicTacToePlayerMarker[3][3];
     private Map<String, TicTacToePlayerMarker> playerAssignment;
+    private String currentPlayerId;
 
-    @Override
-    public void setup(ArrayList<IPlayer> players) {
+    public void setup() {
 
         playerAssignment = new HashMap();
-        // TODO: Make this random.
+
+        List<String> playerIds = new ArrayList<>(this.getPlayers().keySet());
         Random randomNumberGenerator = new Random();
         int firstPlayer = randomNumberGenerator.nextInt(2);
-        playerAssignment.put(this.getPlayers().get(firstPlayer).getId(), TicTacToePlayerMarker.X);
-        playerAssignment.put(this.getPlayers().get(1-firstPlayer).getId(), TicTacToePlayerMarker.O);
+        playerAssignment.put(playerIds.get(firstPlayer), TicTacToePlayerMarker.X);
+        playerAssignment.put(playerIds.get(1 - firstPlayer), TicTacToePlayerMarker.O);
+    }
 
-        board = new TicTacToePlayerMarker[3][3];
-        moveCount = 0;
-        gameOver = false;
-        winner = null;
+    @Override
+    public void play() {
+        
+        this.setup();
+        
+        if (NUM_PLAYERS != this.getNumPlayers()) {
+            System.out.println(this.getNumPlayers());
+            throw new IllegalArgumentException("Please add exactly " + NUM_PLAYERS + " players to the game.");
+        }
+
+        while (!this.isGameOver()) {
+            for (String playerId : this.getPlayers().keySet()) {
+                currentPlayerId = playerId;
+                TicTacToeSpace moveLocation = ((AbstractTicTacToePlayer) this.getPlayers().get(playerId)).takeTurn(board, playerAssignment.get(playerId));
+                move(moveLocation);
+                
+                if (this.isGameOver())
+                    break;
+            }
+        }
     }
 
     /**
@@ -69,21 +89,15 @@ public class TicTacToe extends AbstractGame {
      * @param playerMarker The associated player's mark.
      * @return true if the move was legal, false otherwise.
      */
-    public boolean move(int row, int col, TicTacToePlayerMarker playerMarker) {
-        TicTacToeSpace moveSpace = 
-        if (isValidMove(row, col)) {
-            board[row][col] = playerMarker;
+    public boolean move(TicTacToeSpace moveLocation) {
+        if (isValidMove(moveLocation)) {
+            board[moveLocation.getRow()][moveLocation.getColumn()] = playerAssignment.get(currentPlayerId);
             moveCount++;
-            victoryCheck(row, col, playerMarker);
+            victoryCheck(moveLocation);
             return true;
         }
 
         return false;
-    }
-
-    @Override
-    public IPlayer getWinner(ArrayList<IPlayer> players) {
-        return winner;
     }
 
     /**
@@ -94,35 +108,39 @@ public class TicTacToe extends AbstractGame {
      * @param col Column of the move.
      * @param playerMarker The associated player's mark.
      */
-    private void victoryCheck(int row, int col, AbstractTicTacToePlayer currPlayer) {
+    private void victoryCheck(TicTacToeSpace moveLocation) {
+
+        int row = moveLocation.getRow();
+        int col = moveLocation.getColumn();
+        TicTacToePlayerMarker playerMarker = playerAssignment.get(currentPlayerId);
 
         // check column
         if (isWinningCombo(board[row][0], board[row][1], board[row][2], playerMarker)) {
-            setWinner(playerMarker);
+            setWinningPlayerId(currentPlayerId);
         }
 
         // check row
         if (isWinningCombo(board[0][col], board[1][col], board[2][col], playerMarker)) {
-            setWinner(playerMarker);
+            setWinningPlayerId(currentPlayerId);
         }
 
         // check diagonal
         if (row == col) {
             if (isWinningCombo(board[0][0], board[1][1], board[2][2], playerMarker)) {
-                setWinner(playerMarker);
+                setWinningPlayerId(currentPlayerId);
             }
         }
 
         // check reverse diagonal
         if (row + col == 2) {
             if (isWinningCombo(board[0][2], board[1][1], board[2][0], playerMarker)) {
-                setWinner(playerMarker);
+                setWinningPlayerId(currentPlayerId);
             }
         }
 
         //check draw
         if (!gameOver && moveCount == 9) {
-            setWinner(null);
+            setWinningPlayerId(null);
         }
     }
 
@@ -134,8 +152,9 @@ public class TicTacToe extends AbstractGame {
             return;
         }
 
-        if (getWinner() != null) {
-            System.out.println(getWinner().getName() + " wins the game!");
+        if (getWinningPlayerId() != null) {
+            IPlayer winningPlayer = this.getPlayers().get(getWinningPlayerId());
+            System.out.println(winningPlayer.getName() + " wins the game!");
         } else {
             System.out.println("The game ended in a draw.");
         }
@@ -160,18 +179,14 @@ public class TicTacToe extends AbstractGame {
      *
      * @param player PlayerMarker of the winning player.S
      */
-    private void setWinner(AbstractTicTacToePlayer player) {
+    private void setWinningPlayerId(String playerId) {
         gameOver = true;
-        winner = player;
+        winningPlayerId = playerId;
     }
 
-    /**
-     * Gets the PlayerMarker of the winning player.
-     *
-     * @return PlayerMarker of the winning player.
-     */
-    public AbstractTicTacToePlayer getWinner() {
-        return winner;
+    @Override
+    public String getWinningPlayerId() {
+        return winningPlayerId;
     }
 
     @Override
@@ -212,8 +227,9 @@ public class TicTacToe extends AbstractGame {
      * @param col Column of the move.
      * @return true if it is a valid move, false otherwise.
      */
-    private boolean isValidMove(int row, int col) {
-        return row < 3 && col < 3 && board[row][col] == null;
+    private boolean isValidMove(TicTacToeSpace moveLocation) {
+        return moveLocation.getRow() < 3 && moveLocation.getColumn() < 3
+                && board[moveLocation.getRow()][moveLocation.getColumn()] == null;
     }
 
     /**
@@ -232,10 +248,4 @@ public class TicTacToe extends AbstractGame {
             return position.toString();
         }
     }
-
-    @Override
-    public void play() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }

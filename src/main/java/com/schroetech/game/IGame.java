@@ -1,29 +1,24 @@
 package com.schroetech.game;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Common interface for all game objects.
  */
 public interface IGame {
-
-    /**
-     * Sets up a game, initializing both the game state and the players.
-     *
-     * @param players ArrayList of all of the players taking part in this
-     * particular game instance.
-     */
-    public void setup(ArrayList<IPlayer> players);
     
     public void play();
     
-    public IPlayer getWinner();
+    public String getWinningPlayerId();
     
     public void addPlayer(IPlayer newPlayer);
     
     public void addPlayers(ArrayList<IPlayer> newPlayers);
     
-    public ArrayList<IPlayer> getPlayers();
+    public void setPlayers(Map<String, IPlayer> newPlayers);
+    
+    public Map<String, IPlayer> getPlayers();
 
     /**
      * Gets the minimum number of players needed to play the game.
@@ -45,14 +40,6 @@ public interface IGame {
      * @return true if the game is over, false otherwise.
      */
     public boolean isGameOver();
-
-    /**
-     * Returns the game winner, or null if no winner.
-     *
-     * @param players List of the players taking part in the game.
-     * @return IPlayer representing the winner.
-     */
-    public IPlayer getWinner(ArrayList<IPlayer> players);
 
     /**
      * Prints the results of the game to the console.
