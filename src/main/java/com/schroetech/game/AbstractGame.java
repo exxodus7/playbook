@@ -1,20 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.schroetech.game;
 
 import java.util.ArrayList;
 
 /**
- *
- * @author lauren
+ * Abstract class that holds common functionality for all game objects.
  */
 public abstract class AbstractGame implements IGame {
     
-    private ArrayList<IPlayer> players = new ArrayList();
+    private final ArrayList<IPlayer> players = new ArrayList();
     
     public void addPlayer(IPlayer newPlayer) {
         players.add(newPlayer);

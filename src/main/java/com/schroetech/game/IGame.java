@@ -1,28 +1,66 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.schroetech.game;
 
 import java.util.ArrayList;
 
 /**
- *
- * @author lauren
+ * Common interface for all game objects.
  */
 public interface IGame {
-    
+
+    /**
+     * Sets up a game, initializing both the game state and the players.
+     *
+     * @param players ArrayList of all of the players taking part in this
+     * particular game instance.
+     */
     public void setup(ArrayList<IPlayer> players);
     
+    public void play();
+    
+    public IPlayer getWinner();
+    
+    public void addPlayer(IPlayer newPlayer);
+    
+    public void addPlayers(ArrayList<IPlayer> newPlayers);
+    
+    public ArrayList<IPlayer> getPlayers();
+
+    /**
+     * Gets the minimum number of players needed to play the game.
+     *
+     * @return Minimum number of players.
+     */
     public int getMinPlayers();
-    
+
+    /**
+     * Gets the maximum number of players possible to play the game.
+     *
+     * @return Maximum number of players.
+     */
     public int getMaxPlayers();
-    
+
+    /**
+     * Returns a boolean representing whether the game has ended.
+     *
+     * @return true if the game is over, false otherwise.
+     */
     public boolean isGameOver();
-    
+
+    /**
+     * Returns the game winner, or null if no winner.
+     *
+     * @param players List of the players taking part in the game.
+     * @return IPlayer representing the winner.
+     */
+    public IPlayer getWinner(ArrayList<IPlayer> players);
+
+    /**
+     * Prints the results of the game to the console.
+     */
     public void printResults();
-    
+
+    /**
+     * Prints the current state of the board to the console.
+     */
     public void printBoardState();
 }
