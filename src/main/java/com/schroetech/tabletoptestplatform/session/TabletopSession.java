@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.schroetech.tabletoptestplatform.session;
 
 import com.schroetech.game.IGame;
@@ -12,20 +7,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
- * @author lauren
+ * A session of one type of game. Could involve multiple play-throughs of that
+ * game. Controls the execution of those games and aggregates data
+ * appropriately.
  */
 public class TabletopSession {
 
     private final Map<String, IPlayer> players = new HashMap();
     private String gameType;
     private int numberOfGames;
+    private boolean displayOn = false;
 
+    /**
+     * Executes 1-many iterations of a given game with the given players.
+     *
+     * @return true if the session was run without error, false otherwise.
+     */
     public boolean startSession() {
         Map<String, Integer> numberOfWins = new HashMap();
-        for (String playerId : this.getPlayers().keySet())
-            numberOfWins.put(playerId, 0);   
-            
+        for (String playerId : this.getPlayers().keySet()) {
+            numberOfWins.put(playerId, 0);
+        }
+
         int numberOfDraws = getNumberOfGames();
 
         try {
@@ -33,7 +36,7 @@ public class TabletopSession {
                 Class cls = Class.forName(gameType);
                 IGame game = (IGame) cls.newInstance();
                 game.setPlayers(this.getPlayers());
-                game.play();
+                game.play(displayOn);
                 String winningPlayerId = game.getWinningPlayerId();
                 if (winningPlayerId != null) {
                     numberOfWins.put(winningPlayerId, numberOfWins.get(winningPlayerId) + 1);
@@ -45,6 +48,7 @@ public class TabletopSession {
             return false;
         }
 
+        // print results
         System.out.println("Out of " + getNumberOfGames() + " games: ");
         for (String playerId : getPlayers().keySet()) {
             String playerName = getPlayers().get(playerId).getName();
@@ -56,20 +60,43 @@ public class TabletopSession {
         return true;
     }
 
+    /**
+     * Gets the percentage that one number is of the other.
+     *
+     * @param numerator integer representing the numerator.
+     * @param denominator integer representing the denominator.
+     * @return the percentage.
+     */
     private double percent(int numerator, int denominator) {
         return (numerator * 100.0) / denominator;
     }
 
+    /**
+     * Add a player to the game.
+     *
+     * @param newPlayer The player to add.
+     */
     public void addPlayer(IPlayer newPlayer) {
         players.put(newPlayer.getId(), newPlayer);
     }
 
+    /**
+     * Add multiple players to the game.
+     *
+     * @param newPlayers The players to add.
+     */
     public void addPlayers(ArrayList<IPlayer> newPlayers) {
         for (IPlayer newPlayer : newPlayers) {
             players.put(newPlayer.getId(), newPlayer);
         }
     }
 
+    /**
+     * Gets the players who are a part of the game.
+     *
+     * @return Map representing the players who are a part of the game. The key
+     * to the map is the ID of the associated value, the player.
+     */
     public Map<String, IPlayer> getPlayers() {
         return players;
     }
@@ -88,5 +115,9 @@ public class TabletopSession {
 
     public int getNumberOfGames() {
         return numberOfGames;
+    }
+
+    public void turnDisplayOn() {
+        displayOn = true;
     }
 }

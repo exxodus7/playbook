@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * A Tic Tac Toe player who always makes a random move.
+ * A Tic-Tac-Toe player who always makes a random move.
  */
 public class RandomTicTacToePlayer extends AbstractTicTacToePlayer {
 

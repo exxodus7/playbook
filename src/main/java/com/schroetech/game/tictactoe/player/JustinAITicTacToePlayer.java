@@ -4,8 +4,7 @@ import com.schroetech.game.tictactoe.object.TicTacToePlayerMarker;
 import com.schroetech.game.tictactoe.object.TicTacToeSpace;
 
 /**
- *
- * @author lauren
+ * Tic-Tac-Toe player controlled by Justin's AI.
  */
 public class JustinAITicTacToePlayer extends AbstractTicTacToePlayer {
 

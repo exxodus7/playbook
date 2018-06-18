@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * Implemetation of the game Tic Tac Toe.
+ * Implemetation of the game Tic-Tac-Toe.
  */
 public class TicTacToe extends AbstractGame {
 
@@ -20,15 +20,18 @@ public class TicTacToe extends AbstractGame {
     private static final int NUM_PLAYERS = 2;
     private int moveCount = 0;
     private boolean gameOver = false;
-    private String winningPlayerId;
+    private String winningPlayerID, currentPlayerID;
     private final TicTacToePlayerMarker[][] board = new TicTacToePlayerMarker[3][3];
     private Map<String, TicTacToePlayerMarker> playerAssignment;
-    private String currentPlayerId;
 
+    /**
+     * Sets up the game. Assigns player markers and determines turn order.
+     */
     public void setup() {
 
         playerAssignment = new HashMap();
 
+        // randomly assigns players to either X's or O's.
         List<String> playerIds = new ArrayList<>(this.getPlayers().keySet());
         Random randomNumberGenerator = new Random();
         int firstPlayer = randomNumberGenerator.nextInt(2);
@@ -37,24 +40,33 @@ public class TicTacToe extends AbstractGame {
     }
 
     @Override
-    public void play() {
-        
+    public void play(boolean display) {
+
         this.setup();
-        
+
         if (NUM_PLAYERS != this.getNumPlayers()) {
             System.out.println(this.getNumPlayers());
             throw new IllegalArgumentException("Please add exactly " + NUM_PLAYERS + " players to the game.");
         }
 
         while (!this.isGameOver()) {
-            for (String playerId : this.getPlayers().keySet()) {
-                currentPlayerId = playerId;
-                TicTacToeSpace moveLocation = ((AbstractTicTacToePlayer) this.getPlayers().get(playerId)).takeTurn(board, playerAssignment.get(playerId));
+            for (String playerID : this.getPlayers().keySet()) {
+                currentPlayerID = playerID;
+                TicTacToeSpace moveLocation = ((AbstractTicTacToePlayer) this.getPlayers().get(playerID)).takeTurn(board, playerAssignment.get(playerID));
                 move(moveLocation);
-                
-                if (this.isGameOver())
+
+                if (display) {
+                    printBoardState();
+                }
+
+                if (this.isGameOver()) {
                     break;
+                }
             }
+        }
+
+        if (display) {
+            printResults();
         }
     }
 
@@ -82,16 +94,14 @@ public class TicTacToe extends AbstractGame {
 
     /**
      * Called when a player takes their turn. Represents putting an X or an O on
-     * the board.
+     * the board. Puts the mark of the current player.
      *
-     * @param row Row of the move.
-     * @param col Column of the move.
-     * @param playerMarker The associated player's mark.
+     * @param moveLocation The TicTacToeSpace to put the mark in.
      * @return true if the move was legal, false otherwise.
      */
     public boolean move(TicTacToeSpace moveLocation) {
         if (isValidMove(moveLocation)) {
-            board[moveLocation.getRow()][moveLocation.getColumn()] = playerAssignment.get(currentPlayerId);
+            board[moveLocation.getRow()][moveLocation.getColumn()] = playerAssignment.get(currentPlayerID);
             moveCount++;
             victoryCheck(moveLocation);
             return true;
@@ -104,89 +114,63 @@ public class TicTacToe extends AbstractGame {
      * Checks if the move resulted in victory. If it did, game state is updated
      * to reflect that.
      *
-     * @param row Row of the move.
-     * @param col Column of the move.
+     * @param moveLocation The location to check.
      * @param playerMarker The associated player's mark.
      */
     private void victoryCheck(TicTacToeSpace moveLocation) {
 
         int row = moveLocation.getRow();
         int col = moveLocation.getColumn();
-        TicTacToePlayerMarker playerMarker = playerAssignment.get(currentPlayerId);
+        TicTacToePlayerMarker playerMarker = playerAssignment.get(currentPlayerID);
 
         // check column
         if (isWinningCombo(board[row][0], board[row][1], board[row][2], playerMarker)) {
-            setWinningPlayerId(currentPlayerId);
+            gameOver = true;
+            setWinningPlayerId(currentPlayerID);
         }
 
         // check row
         if (isWinningCombo(board[0][col], board[1][col], board[2][col], playerMarker)) {
-            setWinningPlayerId(currentPlayerId);
+            gameOver = true;
+            setWinningPlayerId(currentPlayerID);
         }
 
         // check diagonal
         if (row == col) {
             if (isWinningCombo(board[0][0], board[1][1], board[2][2], playerMarker)) {
-                setWinningPlayerId(currentPlayerId);
+                gameOver = true;
+                setWinningPlayerId(currentPlayerID);
             }
         }
 
         // check reverse diagonal
         if (row + col == 2) {
             if (isWinningCombo(board[0][2], board[1][1], board[2][0], playerMarker)) {
-                setWinningPlayerId(currentPlayerId);
+                gameOver = true;
+                setWinningPlayerId(currentPlayerID);
             }
         }
 
-        //check draw
-        if (!gameOver && moveCount == 9) {
+        // check for a draw
+        if (!isGameOver() && moveCount == 9) {
+            gameOver = true;
             setWinningPlayerId(null);
         }
     }
 
-    // --- Methods printing to the console ---
-    @Override
-    public void printResults() {
-
-        if (!isGameOver()) {
-            return;
-        }
-
-        if (getWinningPlayerId() != null) {
-            IPlayer winningPlayer = this.getPlayers().get(getWinningPlayerId());
-            System.out.println(winningPlayer.getName() + " wins the game!");
-        } else {
-            System.out.println("The game ended in a draw.");
-        }
-
-        System.out.println("Final board setup:");
-        printBoardState();
-    }
-
-    @Override
-    public void printBoardState() {
-        System.out.println(printPosition(0, 0) + "|" + printPosition(0, 1) + "|" + printPosition(0, 2));
-        System.out.println("-----");
-        System.out.println(printPosition(1, 0) + "|" + printPosition(1, 1) + "|" + printPosition(1, 2));
-        System.out.println("-----");
-        System.out.println(printPosition(2, 0) + "|" + printPosition(2, 1) + "|" + printPosition(2, 2));
-        System.out.println();
-    }
-
-    // -- Getters and Setters ---
+    // --- Getters and Setters ---
     /**
      * Sets the winner of the game.
      *
-     * @param player PlayerMarker of the winning player.S
+     * @param playerID String representing the ID of the winning player.
      */
-    private void setWinningPlayerId(String playerId) {
-        gameOver = true;
-        winningPlayerId = playerId;
+    private void setWinningPlayerId(String playerID) {
+        winningPlayerID = playerID;
     }
 
     @Override
     public String getWinningPlayerId() {
-        return winningPlayerId;
+        return winningPlayerID;
     }
 
     @Override
@@ -195,12 +179,12 @@ public class TicTacToe extends AbstractGame {
     }
 
     @Override
-    public int getMinPlayers() {
+    public int getMinNumPlayers() {
         return NUM_PLAYERS;
     }
 
     @Override
-    public int getMaxPlayers() {
+    public int getMaxNumPlayers() {
         return NUM_PLAYERS;
     }
 
@@ -230,6 +214,35 @@ public class TicTacToe extends AbstractGame {
     private boolean isValidMove(TicTacToeSpace moveLocation) {
         return moveLocation.getRow() < 3 && moveLocation.getColumn() < 3
                 && board[moveLocation.getRow()][moveLocation.getColumn()] == null;
+    }
+
+    // --- Methods printing to the console ---
+    @Override
+    public void printResults() {
+
+        if (!isGameOver()) {
+            return;
+        }
+
+        if (getWinningPlayerId() != null) {
+            IPlayer winningPlayer = this.getPlayers().get(getWinningPlayerId());
+            System.out.println(winningPlayer.getName() + " wins the game!");
+        } else {
+            System.out.println("The game ended in a draw.");
+        }
+
+        System.out.println("Final board setup:");
+        printBoardState();
+    }
+
+    @Override
+    public void printBoardState() {
+        System.out.println(printPosition(0, 0) + "|" + printPosition(0, 1) + "|" + printPosition(0, 2));
+        System.out.println("-----");
+        System.out.println(printPosition(1, 0) + "|" + printPosition(1, 1) + "|" + printPosition(1, 2));
+        System.out.println("-----");
+        System.out.println(printPosition(2, 0) + "|" + printPosition(2, 1) + "|" + printPosition(2, 2));
+        System.out.println();
     }
 
     /**
