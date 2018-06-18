@@ -3,6 +3,7 @@ package com.schroetech.tabletoptestplatform;
 import com.schroetech.game.IPlayer;
 import com.schroetech.game.tictactoe.TicTacToe;
 import com.schroetech.game.tictactoe.player.JustinAITicTacToePlayer;
+import com.schroetech.game.tictactoe.player.RandomTicTacToePlayer;
 import com.schroetech.tabletoptestplatform.session.TabletopSession;
 
 /**
@@ -22,17 +23,17 @@ public class TabletopTestPlatform {
         System.out.println("Today we will be playing Tic-Tac-Toe, whether you like it or not.");
 
         // ceate players
-        IPlayer playerA = new JustinAITicTacToePlayer();
+        IPlayer playerA = new RandomTicTacToePlayer();
         playerA.setName("Bob");
         IPlayer playerB = new JustinAITicTacToePlayer();
-        playerB.setName("Lauren");
+        playerB.setName("Justin");
 
         // create a tabletop session
         TabletopSession session = new TabletopSession();
         session.setGameType(TicTacToe.class.getName());
         session.addPlayer(playerA);
         session.addPlayer(playerB);
-        session.setNumberOfGames(100);
+        session.setNumberOfGames(1000);
 
         session.startSession();
     }

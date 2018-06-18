@@ -36,8 +36,11 @@ public class TabletopSession {
                 Class cls = Class.forName(gameType);
                 IGame game = (IGame) cls.newInstance();
                 game.setPlayers(this.getPlayers());
-                game.play(displayOn);
-                String winningPlayerId = game.getWinningPlayerId();
+                if (!game.play(displayOn)) {
+                    return false;
+                }
+
+                String winningPlayerId = game.getWinningPlayerID();
                 if (winningPlayerId != null) {
                     numberOfWins.put(winningPlayerId, numberOfWins.get(winningPlayerId) + 1);
                     numberOfDraws--;

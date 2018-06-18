@@ -1,7 +1,7 @@
 package com.schroetech.game.tictactoe;
 
 import com.schroetech.game.tictactoe.object.TicTacToePlayerMarker;
-import com.schroetech.game.AbstractGame;
+import com.schroetech.game.AbstractSimpleTurnGame;
 import com.schroetech.game.IPlayer;
 import com.schroetech.game.tictactoe.object.TicTacToeSpace;
 import com.schroetech.game.tictactoe.player.AbstractTicTacToePlayer;
@@ -14,19 +14,18 @@ import java.util.Random;
 /**
  * Implemetation of the game Tic-Tac-Toe.
  */
-public class TicTacToe extends AbstractGame {
+public class TicTacToe extends AbstractSimpleTurnGame {
 
     // Private variables
     private static final int NUM_PLAYERS = 2;
     private int moveCount = 0;
-    private boolean gameOver = false;
-    private String winningPlayerID, currentPlayerID;
     private final TicTacToePlayerMarker[][] board = new TicTacToePlayerMarker[3][3];
     private Map<String, TicTacToePlayerMarker> playerAssignment;
 
     /**
      * Sets up the game. Assigns player markers and determines turn order.
      */
+    @Override
     public void setup() {
 
         playerAssignment = new HashMap();
@@ -40,34 +39,18 @@ public class TicTacToe extends AbstractGame {
     }
 
     @Override
-    public void play(boolean display) {
+    protected boolean playerTurn() {
 
-        this.setup();
+        TicTacToeSpace moveLocation = ((AbstractTicTacToePlayer) getPlayers().get(getCurrentPlayerID())).takeTurn(board, playerAssignment.get(getCurrentPlayerID()));
 
-        if (NUM_PLAYERS != this.getNumPlayers()) {
-            System.out.println(this.getNumPlayers());
-            throw new IllegalArgumentException("Please add exactly " + NUM_PLAYERS + " players to the game.");
+        if (isValidMove(moveLocation)) {
+            board[moveLocation.getRow()][moveLocation.getColumn()] = playerAssignment.get(getCurrentPlayerID());
+            moveCount++;
+            victoryCheck(moveLocation);
+            return true;
         }
 
-        while (!this.isGameOver()) {
-            for (String playerID : this.getPlayers().keySet()) {
-                currentPlayerID = playerID;
-                TicTacToeSpace moveLocation = ((AbstractTicTacToePlayer) this.getPlayers().get(playerID)).takeTurn(board, playerAssignment.get(playerID));
-                move(moveLocation);
-
-                if (display) {
-                    printBoardState();
-                }
-
-                if (this.isGameOver()) {
-                    break;
-                }
-            }
-        }
-
-        if (display) {
-            printResults();
-        }
+        return false;
     }
 
     /**
@@ -93,24 +76,6 @@ public class TicTacToe extends AbstractGame {
     }
 
     /**
-     * Called when a player takes their turn. Represents putting an X or an O on
-     * the board. Puts the mark of the current player.
-     *
-     * @param moveLocation The TicTacToeSpace to put the mark in.
-     * @return true if the move was legal, false otherwise.
-     */
-    public boolean move(TicTacToeSpace moveLocation) {
-        if (isValidMove(moveLocation)) {
-            board[moveLocation.getRow()][moveLocation.getColumn()] = playerAssignment.get(currentPlayerID);
-            moveCount++;
-            victoryCheck(moveLocation);
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Checks if the move resulted in victory. If it did, game state is updated
      * to reflect that.
      *
@@ -121,63 +86,39 @@ public class TicTacToe extends AbstractGame {
 
         int row = moveLocation.getRow();
         int col = moveLocation.getColumn();
-        TicTacToePlayerMarker playerMarker = playerAssignment.get(currentPlayerID);
+        TicTacToePlayerMarker playerMarker = playerAssignment.get(getCurrentPlayerID());
 
         // check column
         if (isWinningCombo(board[row][0], board[row][1], board[row][2], playerMarker)) {
-            gameOver = true;
-            setWinningPlayerId(currentPlayerID);
+            gameOver(getCurrentPlayerID());
         }
 
         // check row
         if (isWinningCombo(board[0][col], board[1][col], board[2][col], playerMarker)) {
-            gameOver = true;
-            setWinningPlayerId(currentPlayerID);
+            gameOver(getCurrentPlayerID());
         }
 
         // check diagonal
         if (row == col) {
             if (isWinningCombo(board[0][0], board[1][1], board[2][2], playerMarker)) {
-                gameOver = true;
-                setWinningPlayerId(currentPlayerID);
+                gameOver(getCurrentPlayerID());
             }
         }
 
         // check reverse diagonal
         if (row + col == 2) {
             if (isWinningCombo(board[0][2], board[1][1], board[2][0], playerMarker)) {
-                gameOver = true;
-                setWinningPlayerId(currentPlayerID);
+                gameOver(getCurrentPlayerID());
             }
         }
 
         // check for a draw
         if (!isGameOver() && moveCount == 9) {
-            gameOver = true;
-            setWinningPlayerId(null);
+            gameOver(null);
         }
     }
 
     // --- Getters and Setters ---
-    /**
-     * Sets the winner of the game.
-     *
-     * @param playerID String representing the ID of the winning player.
-     */
-    private void setWinningPlayerId(String playerID) {
-        winningPlayerID = playerID;
-    }
-
-    @Override
-    public String getWinningPlayerId() {
-        return winningPlayerID;
-    }
-
-    @Override
-    public boolean isGameOver() {
-        return gameOver;
-    }
-
     @Override
     public int getMinNumPlayers() {
         return NUM_PLAYERS;
@@ -224,8 +165,8 @@ public class TicTacToe extends AbstractGame {
             return;
         }
 
-        if (getWinningPlayerId() != null) {
-            IPlayer winningPlayer = this.getPlayers().get(getWinningPlayerId());
+        if (getWinningPlayerID() != null) {
+            IPlayer winningPlayer = this.getPlayers().get(getWinningPlayerID());
             System.out.println(winningPlayer.getName() + " wins the game!");
         } else {
             System.out.println("The game ended in a draw.");

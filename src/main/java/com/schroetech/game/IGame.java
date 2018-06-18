@@ -12,7 +12,7 @@ public interface IGame {
      * Play through one complete iteration of the game. Will not display ongoing
      * game state to the console.
      */
-    public void play();
+    public boolean play();
 
     /**
      * Play through one complete iteration of the game.
@@ -20,7 +20,7 @@ public interface IGame {
      * @param display Whether or not to display ongoing game state to the
      * console.
      */
-    public void play(boolean display);
+    public boolean play(boolean display);
 
     /**
      * Get the ID of the winning player.
@@ -28,7 +28,7 @@ public interface IGame {
      * @return String representing the ID of the winning player, or null if
      * there was a draw.
      */
-    public String getWinningPlayerId();
+    public String getWinningPlayerID();
 
     /**
      * Add a player to the game.
