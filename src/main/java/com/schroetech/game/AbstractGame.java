@@ -98,4 +98,21 @@ public abstract class AbstractGame implements IGame {
         gameOver = true;
         setWinningPlayerID(winnerID);
     }
+
+    @Override
+    public void printResults() {
+        if (!isGameOver()) {
+            return;
+        }
+
+        if (getWinningPlayerID() != null) {
+            IPlayer winningPlayer = this.getPlayers().get(getWinningPlayerID());
+            System.out.println(winningPlayer.getName() + " wins the game!");
+        } else {
+            System.out.println("The game ended in a draw.");
+        }
+
+        System.out.println("Final board setup:");
+        printBoardState();
+    }
 }

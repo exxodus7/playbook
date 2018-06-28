@@ -57,4 +57,5 @@ public abstract class AbstractSimpleTurnGame extends AbstractGame {
      * @return true if the turn was successful. False otherwise.
      */
     protected abstract boolean playerTurn();
+
 }

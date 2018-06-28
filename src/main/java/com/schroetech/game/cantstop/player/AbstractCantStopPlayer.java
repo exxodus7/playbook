@@ -6,6 +6,8 @@
 package com.schroetech.game.cantstop.player;
 
 import com.schroetech.game.AbstractPlayer;
+import com.schroetech.game.object.Dice;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -14,5 +16,7 @@ import java.util.Map;
  */
 public abstract class AbstractCantStopPlayer extends AbstractPlayer {
 
-    public abstract int[] takeTurn(Map<String, int[]> board, int[] dice);
+    public abstract int[] takeTurn(Map<String, int[]> board, Collection<Dice> dice);
+
+    public abstract boolean continueOrStop(Map<String, int[]> board);
 }

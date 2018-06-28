@@ -1,9 +1,8 @@
 package com.schroetech.tabletoptestplatform;
 
 import com.schroetech.game.IPlayer;
-import com.schroetech.game.tictactoe.TicTacToe;
-import com.schroetech.game.tictactoe.player.JustinAITicTacToePlayer;
-import com.schroetech.game.tictactoe.player.RandomTicTacToePlayer;
+import com.schroetech.game.cantstop.CantStop;
+import com.schroetech.game.cantstop.player.RandomCantStopPlayer;
 import com.schroetech.tabletoptestplatform.session.TabletopSession;
 
 /**
@@ -20,20 +19,21 @@ public class TabletopTestPlatform {
     public static void main(String[] args) {
 
         System.out.println("Welcome to the Tabletop Test Platform!");
-        System.out.println("Today we will be playing Tic-Tac-Toe, whether you like it or not.");
+        System.out.println("Today we will be playing Can't Stop, whether you like it or not.");
 
         // ceate players
-        IPlayer playerA = new RandomTicTacToePlayer();
+        IPlayer playerA = new RandomCantStopPlayer();
         playerA.setName("Bob");
-        IPlayer playerB = new JustinAITicTacToePlayer();
-        playerB.setName("Justin");
+        IPlayer playerB = new RandomCantStopPlayer();
+        playerB.setName("Jack");
 
         // create a tabletop session
         TabletopSession session = new TabletopSession();
-        session.setGameType(TicTacToe.class.getName());
+        session.setGameType(CantStop.class.getName());
         session.addPlayer(playerA);
         session.addPlayer(playerB);
-        session.setNumberOfGames(1000);
+        session.setNumberOfGames(1);
+        session.turnDisplayOn();
 
         session.startSession();
     }

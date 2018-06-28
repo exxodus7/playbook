@@ -159,24 +159,6 @@ public class TicTacToe extends AbstractSimpleTurnGame {
 
     // --- Methods printing to the console ---
     @Override
-    public void printResults() {
-
-        if (!isGameOver()) {
-            return;
-        }
-
-        if (getWinningPlayerID() != null) {
-            IPlayer winningPlayer = this.getPlayers().get(getWinningPlayerID());
-            System.out.println(winningPlayer.getName() + " wins the game!");
-        } else {
-            System.out.println("The game ended in a draw.");
-        }
-
-        System.out.println("Final board setup:");
-        printBoardState();
-    }
-
-    @Override
     public void printBoardState() {
         System.out.println(printPosition(0, 0) + "|" + printPosition(0, 1) + "|" + printPosition(0, 2));
         System.out.println("-----");
