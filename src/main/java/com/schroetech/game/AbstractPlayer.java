@@ -1,35 +1,36 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.schroetech.game;
 
 import java.util.UUID;
 
 /**
- *
- * @author lauren
+ * Provides common functionality for any Player object.
  */
 public abstract class AbstractPlayer implements IPlayer {
 
     private String name = "";
-    private String id;
-    
+    private final String id;
+
+    /**
+     * Constructor for AbstractPlayer. Creates a unique ID for that player.
+     */
     public AbstractPlayer() {
         id = UUID.randomUUID().toString();
     }
-    
+
     @Override
     public String getName() {
-        return name;
+        if (!name.isEmpty()) {
+            return name;
+        } else {
+            return id;
+        }
     }
 
     @Override
     public void setName(String newName) {
         name = newName;
     }
-    
+
     @Override
     public String getId() {
         return id;

@@ -2,7 +2,6 @@ package com.schroetech.game.tictactoe;
 
 import com.schroetech.game.tictactoe.object.TicTacToePlayerMarker;
 import com.schroetech.game.AbstractSimpleTurnGame;
-import com.schroetech.game.IPlayer;
 import com.schroetech.game.tictactoe.object.TicTacToeSpace;
 import com.schroetech.game.tictactoe.player.AbstractTicTacToePlayer;
 import java.util.ArrayList;
@@ -41,10 +40,10 @@ public class TicTacToe extends AbstractSimpleTurnGame {
     @Override
     protected boolean playerTurn() {
 
-        TicTacToeSpace moveLocation = ((AbstractTicTacToePlayer) getPlayers().get(getCurrentPlayerID())).takeTurn(board, playerAssignment.get(getCurrentPlayerID()));
+        TicTacToeSpace moveLocation = ((AbstractTicTacToePlayer) getPlayers().get(getCurrentPlayerId())).takeTurn(board, playerAssignment.get(getCurrentPlayerId()));
 
         if (isValidMove(moveLocation)) {
-            board[moveLocation.getRow()][moveLocation.getColumn()] = playerAssignment.get(getCurrentPlayerID());
+            board[moveLocation.getRow()][moveLocation.getColumn()] = playerAssignment.get(getCurrentPlayerId());
             moveCount++;
             victoryCheck(moveLocation);
             return true;
@@ -86,29 +85,29 @@ public class TicTacToe extends AbstractSimpleTurnGame {
 
         int row = moveLocation.getRow();
         int col = moveLocation.getColumn();
-        TicTacToePlayerMarker playerMarker = playerAssignment.get(getCurrentPlayerID());
+        TicTacToePlayerMarker playerMarker = playerAssignment.get(getCurrentPlayerId());
 
         // check column
         if (isWinningCombo(board[row][0], board[row][1], board[row][2], playerMarker)) {
-            gameOver(getCurrentPlayerID());
+            gameOver(getCurrentPlayerId());
         }
 
         // check row
         if (isWinningCombo(board[0][col], board[1][col], board[2][col], playerMarker)) {
-            gameOver(getCurrentPlayerID());
+            gameOver(getCurrentPlayerId());
         }
 
         // check diagonal
         if (row == col) {
             if (isWinningCombo(board[0][0], board[1][1], board[2][2], playerMarker)) {
-                gameOver(getCurrentPlayerID());
+                gameOver(getCurrentPlayerId());
             }
         }
 
         // check reverse diagonal
         if (row + col == 2) {
             if (isWinningCombo(board[0][2], board[1][1], board[2][0], playerMarker)) {
-                gameOver(getCurrentPlayerID());
+                gameOver(getCurrentPlayerId());
             }
         }
 
@@ -159,7 +158,7 @@ public class TicTacToe extends AbstractSimpleTurnGame {
 
     // --- Methods printing to the console ---
     @Override
-    public void printBoardState() {
+    public void displayGameStateToConsole() {
         System.out.println(printPosition(0, 0) + "|" + printPosition(0, 1) + "|" + printPosition(0, 2));
         System.out.println("-----");
         System.out.println(printPosition(1, 0) + "|" + printPosition(1, 1) + "|" + printPosition(1, 2));

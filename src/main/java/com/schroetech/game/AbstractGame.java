@@ -48,14 +48,14 @@ public abstract class AbstractGame implements IGame {
     /**
      * Sets the winner of the game.
      *
-     * @param playerID String representing the ID of the winning player.
+     * @param playerId String representing the ID of the winning player.
      */
-    protected void setWinningPlayerID(String playerID) {
-        winningPlayerID = playerID;
+    protected void setWinningPlayerId(String playerId) {
+        winningPlayerID = playerId;
     }
 
     @Override
-    public String getWinningPlayerID() {
+    public String getWinningPlayerId() {
         return winningPlayerID;
     }
 
@@ -64,7 +64,7 @@ public abstract class AbstractGame implements IGame {
      *
      * @param playerID String representing the ID of the current player.
      */
-    protected void setCurrentPlayerID(String playerID) {
+    protected void setCurrentPlayerId(String playerID) {
         currentPlayerID = playerID;
     }
 
@@ -73,7 +73,7 @@ public abstract class AbstractGame implements IGame {
      *
      * @return String representing the ID of the current player.
      */
-    public String getCurrentPlayerID() {
+    public String getCurrentPlayerId() {
         return currentPlayerID;
     }
 
@@ -95,24 +95,24 @@ public abstract class AbstractGame implements IGame {
      * @param winnerID
      */
     protected void gameOver(String winnerID) {
-        gameOver = true;
-        setWinningPlayerID(winnerID);
+        setWinningPlayerId(winnerID);
+        gameOver();
     }
 
     @Override
-    public void printResults() {
+    public void displayFinalResultsToConsole() {
         if (!isGameOver()) {
             return;
         }
 
-        if (getWinningPlayerID() != null) {
-            IPlayer winningPlayer = this.getPlayers().get(getWinningPlayerID());
+        if (getWinningPlayerId() != null) {
+            IPlayer winningPlayer = this.getPlayers().get(getWinningPlayerId());
             System.out.println(winningPlayer.getName() + " wins the game!");
         } else {
             System.out.println("The game ended in a draw.");
         }
 
         System.out.println("Final board setup:");
-        printBoardState();
+        displayGameStateToConsole();
     }
 }

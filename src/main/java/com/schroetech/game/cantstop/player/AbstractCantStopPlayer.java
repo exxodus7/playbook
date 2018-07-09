@@ -1,22 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.schroetech.game.cantstop.player;
 
 import com.schroetech.game.AbstractPlayer;
-import com.schroetech.game.object.Dice;
+import com.schroetech.game.cantstop.object.CantStopBoard;
 import java.util.Collection;
-import java.util.Map;
 
 /**
- *
- * @author lauren
+ * Common functionality for a Can't Stop player.
  */
 public abstract class AbstractCantStopPlayer extends AbstractPlayer {
 
-    public abstract int[] takeTurn(Map<String, int[]> board, Collection<Dice> dice);
+    /**
+     * Takes a turn at the game Can't Stop.
+     *
+     * @param board The state of the board. Where all of every player's markers
+     * are, including temporary markers.
+     * @param possibleMoves A collection of all of the possible moves.
+     * @return Which columns to advance on. Should be one of the possible moves
+     * from the possibleMoves Collection.
+     */
+    public abstract int[] takeTurn(CantStopBoard board, Collection<int[]> possibleMoves);
 
-    public abstract boolean continueOrStop(Map<String, int[]> board);
+    /**
+     * Whether to continue and take another turn or stop and upgrade the player
+     * markers. Stopping ends the turn.
+     *
+     * @param board The state of the board. Where all of every player's markers
+     * are, including temporary markers.
+     * @return Whether or not to continue playing.
+     */
+    public abstract boolean continueOrStop(CantStopBoard board);
 }

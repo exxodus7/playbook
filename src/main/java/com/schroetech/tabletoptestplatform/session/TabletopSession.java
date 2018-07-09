@@ -40,7 +40,7 @@ public class TabletopSession {
                     return false;
                 }
 
-                String winningPlayerId = game.getWinningPlayerID();
+                String winningPlayerId = game.getWinningPlayerId();
                 if (winningPlayerId != null) {
                     numberOfWins.put(winningPlayerId, numberOfWins.get(winningPlayerId) + 1);
                     numberOfDraws--;

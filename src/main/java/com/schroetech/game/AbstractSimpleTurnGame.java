@@ -1,36 +1,48 @@
 package com.schroetech.game;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Represents a game where the players take turns.
  */
 public abstract class AbstractSimpleTurnGame extends AbstractGame {
+    
+    protected boolean display = false;
 
     @Override
     public boolean play(boolean display) {
 
+        this.display = display;
         this.setup();
 
+        // Check for a correct number of players.
         if (this.getNumPlayers() < this.getMinNumPlayers()
                 || this.getNumPlayers() > this.getMaxNumPlayers()) {
             if (this.getMinNumPlayers() == this.getMaxNumPlayers()) {
-                throw new IllegalArgumentException("Please add exactly " + this.getMinNumPlayers() + " players to the game.");
+                System.out.println("Please add exactly " + this.getMinNumPlayers() + " players to the game.");
             } else {
-                throw new IllegalArgumentException("Please add between " + this.getMinNumPlayers() + " and " + this.getMaxNumPlayers() + " to the game.");
+                System.out.println("Please add between " + this.getMinNumPlayers() + " and " + this.getMaxNumPlayers() + " players to the game.");
             }
+            return false;
         }
 
+        // Set turn order.
+        List<String> playerIds = new ArrayList(this.getPlayers().keySet());
+        Collections.shuffle(playerIds);
+        
         while (!this.isGameOver()) {
-            for (String playerID : this.getPlayers().keySet()) {
-                setCurrentPlayerID(playerID);
+            for (String playerId : playerIds) {
+                setCurrentPlayerId(playerId);
                 if (!playerTurn()) {
-                    System.out.println(this.getPlayers().get(playerID).getName() + " (" + playerID + ") ran into a problem executing their turn.");
-                    System.out.println("Current board state: ");
-                    printBoardState();
+                    System.out.println(this.getPlayers().get(playerId).getName() + " (" + playerId + ") ran into a problem executing their turn.");
+                    displayGameStateToConsole();
                     return false;
                 }
 
                 if (display) {
-                    printBoardState();
+                    displayGameStateToConsole();
                 }
 
                 if (this.isGameOver()) {
@@ -40,7 +52,7 @@ public abstract class AbstractSimpleTurnGame extends AbstractGame {
         }
 
         if (display) {
-            printResults();
+            displayFinalResultsToConsole();
         }
 
         return true;

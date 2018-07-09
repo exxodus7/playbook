@@ -11,6 +11,8 @@ public interface IGame {
     /**
      * Play through one complete iteration of the game. Will not display ongoing
      * game state to the console.
+     *
+     * @return boolean representing whether the game finished successfully.
      */
     public boolean play();
 
@@ -19,6 +21,7 @@ public interface IGame {
      *
      * @param display Whether or not to display ongoing game state to the
      * console.
+     * @return boolean representing whether the game finished successfully.
      */
     public boolean play(boolean display);
 
@@ -28,7 +31,7 @@ public interface IGame {
      * @return String representing the ID of the winning player, or null if
      * there was a draw.
      */
-    public String getWinningPlayerID();
+    public String getWinningPlayerId();
 
     /**
      * Add a player to the game.
@@ -91,11 +94,11 @@ public interface IGame {
     /**
      * Prints the results of the game to the console.
      */
-    public void printResults();
+    public void displayFinalResultsToConsole();
 
     /**
      * Prints the current state of the board to the console.
      */
-    public void printBoardState();
+    public void displayGameStateToConsole();
 
 }

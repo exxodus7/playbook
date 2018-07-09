@@ -1,37 +1,27 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.schroetech.game.cantstop.player;
 
-import com.schroetech.game.cantstop.CantStop;
-import com.schroetech.game.object.Dice;
+import com.schroetech.game.cantstop.object.CantStopBoard;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
- *
- * @author lauren
+ * A player who makes random moves at Can't Stop.
  */
 public class RandomCantStopPlayer extends AbstractCantStopPlayer {
 
     @Override
-    public int[] takeTurn(Map<String, int[]> board, Collection<Dice> dice) {
-        List<int[]> possibilities = CantStop.getPossibleMoves(board, dice);
+    public int[] takeTurn(CantStopBoard board, Collection<int[]> possibleMoves) {
 
-        if (possibilities.isEmpty()) {
+        if (possibleMoves.isEmpty()) {
             return null;
         } else {
             Random randomNumberGenerator = new Random();
-            return possibilities.get(randomNumberGenerator.nextInt(possibilities.size()));
+            return (int[]) possibleMoves.toArray()[randomNumberGenerator.nextInt(possibleMoves.size())];
         }
     }
 
     @Override
-    public boolean continueOrStop(Map<String, int[]> board) {
+    public boolean continueOrStop(CantStopBoard board) {
         // 25% chance the player will stop.
         Random randomNumberGenerator = new Random();
         return (randomNumberGenerator.nextInt(4) != 0);

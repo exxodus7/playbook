@@ -6,14 +6,15 @@ package com.schroetech.game;
 public interface IPlayer {
 
     /**
-     * Returns the name of the player.
+     * Returns the name of the player. If no name set, returns the ID of the
+     * player.
      *
      * @return String representing the name of the player.
      */
     public String getName();
 
     /**
-     * Sets the player's name;
+     * Sets the player's name.
      *
      * @param newName String representing the player's name.
      */
