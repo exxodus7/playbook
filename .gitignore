@@ -1,1 +1,4 @@
 /target/
+/PlayBook/target/
+/TabletopTestPlatform/target/
+.DS_Store
