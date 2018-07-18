@@ -1,6 +1,5 @@
 package com.schroetech.gamesimulator.game.cantstop;
 
-import com.schroetech.gamesimulator.game.cantstop.CantStop;
 import com.schroetech.gamesimulator.game.cantstop.object.CantStopBoard;
 import com.schroetech.gamesimulator.game.cantstop.player.AbstractCantStopPlayer;
 import com.schroetech.gamesimulator.game.cantstop.player.RandomCantStopPlayer;
@@ -8,7 +7,6 @@ import com.schroetech.gamesimulator.common.object.Dice;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -18,7 +16,6 @@ import static org.junit.Assert.*;
  */
 public class CantStopTest extends CantStop {
 
-    private CantStop game;
     private boolean tookTurn = false;
 
     @Before

@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.schroetech</groupId>
     <artifactId>play-book</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
     <name>PlayBook</name>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mainClass>com.schroetech.playbook.MainApp</mainClass>
+        <mainClass>com.schroetech.playbook.PlayBook</mainClass>
     </properties>
-
-    <organization>
-        <!-- Used as the 'Vendor' for JNLP generation -->
-        <name>Your Organisation</name>
-    </organization>
-
+    <dependencies>
+        <dependency>
+            <groupId>com.schroetech</groupId>
+            <artifactId>game-simulator</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.jfoenix</groupId>
+            <artifactId>jfoenix</artifactId>
+            <version>8.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>de.jensd</groupId>
+            <artifactId>fontawesomefx</artifactId>
+            <version>8.9</version>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -53,7 +62,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${java.home}/../bin/javafxpackager</executable>
+                            <executable>${java.home}/../bin/javapackager</executable>
                             <arguments>
                                 <argument>-createjar</argument>
                                 <argument>-nocss2bin</argument>
@@ -104,5 +113,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

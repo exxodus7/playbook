@@ -3,3 +3,5 @@
 /TabletopTestPlatform/target/
 .DS_Store
 /GameSimulator/target/
+/Analytics/target/
+/GameSimulator/nbproject/

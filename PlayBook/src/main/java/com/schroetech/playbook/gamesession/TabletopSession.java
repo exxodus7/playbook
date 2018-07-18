@@ -1,4 +1,4 @@
-package com.schroetech.gamesimulator.session;
+package com.schroetech.playbook.gamesession;
 
 import com.schroetech.gamesimulator.common.object.IGame;
 import com.schroetech.gamesimulator.common.player.IPlayer;

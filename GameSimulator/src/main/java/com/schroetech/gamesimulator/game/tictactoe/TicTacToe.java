@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * Implemetation of the game Tic-Tac-Toe.
+ * Implementation of the game Tic-Tac-Toe.
  */
 public class TicTacToe extends AbstractSimpleTurnGame {
 
@@ -33,6 +33,7 @@ public class TicTacToe extends AbstractSimpleTurnGame {
         List<String> playerIds = new ArrayList<>(this.getPlayers().keySet());
         Random randomNumberGenerator = new Random();
         int firstPlayer = randomNumberGenerator.nextInt(2);
+        this.setCurrentPlayerId(playerIds.get(firstPlayer));
         playerAssignment.put(playerIds.get(firstPlayer), TicTacToePlayerMarker.X);
         playerAssignment.put(playerIds.get(1 - firstPlayer), TicTacToePlayerMarker.O);
     }
@@ -42,14 +43,14 @@ public class TicTacToe extends AbstractSimpleTurnGame {
 
         TicTacToeSpace moveLocation = ((AbstractTicTacToePlayer) getPlayers().get(getCurrentPlayerId())).takeTurn(board, playerAssignment.get(getCurrentPlayerId()));
 
-        if (isValidMove(moveLocation)) {
-            board[moveLocation.getRow()][moveLocation.getColumn()] = playerAssignment.get(getCurrentPlayerId());
-            moveCount++;
-            victoryCheck(moveLocation);
-            return true;
+        if (!isValidMove(moveLocation)) {
+            return false;
         }
 
-        return false;
+        board[moveLocation.getRow()][moveLocation.getColumn()] = playerAssignment.get(getCurrentPlayerId());
+        moveCount++;
+        victoryCheck(moveLocation);
+        return true;
     }
 
     /**
@@ -62,16 +63,6 @@ public class TicTacToe extends AbstractSimpleTurnGame {
      */
     public TicTacToePlayerMarker getPosition(int row, int col) {
         return board[row][col];
-    }
-
-    /**
-     * Gets the entire game board.
-     *
-     * @return Double array of PlayerMarkers representing the current state of
-     * the entire game board.
-     */
-    public TicTacToePlayerMarker[][] getBoard() {
-        return board;
     }
 
     /**

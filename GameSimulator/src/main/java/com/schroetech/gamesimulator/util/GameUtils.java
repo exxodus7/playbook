@@ -1,18 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.schroetech.gamesimulator.util;
 
 import com.schroetech.gamesimulator.common.object.Dice;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
 /**
- *
- * @author lauren
+ * Provides common utilities useful for simulating games.
  */
 public class GameUtils {
 
@@ -30,16 +23,16 @@ public class GameUtils {
             die.roll();
         }
     }
-    
+
     public static String getDiceAsString(Collection<Dice> dice) {
         String diceDisplay = "";
-        for(Dice die : dice) {
+        for (Dice die : dice) {
             diceDisplay += " " + die.getValue();
         }
-        
+
         return diceDisplay;
     }
-    
+
     public static int[] getDiceValues(Collection<Dice> dice) {
         int[] diceValues = new int[dice.size()];
         int i = 0;
@@ -47,7 +40,7 @@ public class GameUtils {
             diceValues[i] = die.getValue();
             i++;
         }
-        
+
         return diceValues;
     }
 }
