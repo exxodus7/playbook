@@ -27,7 +27,7 @@ public class MainController implements Initializable {
 
     @FXML
     private AnchorPane holderPane;
-    
+
     private AnchorPane dashboard;
 
     /**
