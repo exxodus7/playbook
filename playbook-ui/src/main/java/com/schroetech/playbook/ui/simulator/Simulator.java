@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.schroetech.playbook.ui.simulator;
 
 import com.schroetech.playbook.model.cantstop.CantStop;
@@ -19,8 +14,8 @@ import java.util.Properties;
 import java.util.Scanner;
 
 /**
- *
- * @author lauren
+ * Runs simulations of games. Sets up the game session using user command line
+ * input.
  */
 public class Simulator {
 
@@ -32,6 +27,13 @@ public class Simulator {
     private static ArrayList<Class> availableGames;
     private static Map<String, ArrayList<Class>> availablePlayers;
 
+    /**
+     * Asks the user about their session preferences.
+     *
+     * @throws IOException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     public void setup() throws IOException, InstantiationException, IllegalAccessException {
         // ceate players
         loadProperties();
