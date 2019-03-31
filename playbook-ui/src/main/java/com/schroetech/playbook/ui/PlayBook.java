@@ -1,6 +1,6 @@
 package com.schroetech.playbook.ui;
 
-import com.schroetech.playbook.ui.simulator.Simulator;
+import com.schroetech.playbook.ui.simulator.SimulatorInterface;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -35,8 +35,7 @@ public class PlayBook {
                 in.nextLine();
                 switch (selection) {
                     case 1:
-                        Simulator sim = new Simulator();
-                        sim.setup();
+                        SimulatorInterface sim = new SimulatorInterface();
                         sim.run();
                         break;
                     case 2:
@@ -60,7 +59,7 @@ public class PlayBook {
                         exit = true;
                     }
                 }
-            } catch (IOException | InstantiationException | IllegalAccessException ex) {
+            } catch (IOException | InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
                 System.out.println("Error setting up the session.");
                 return;
             }
