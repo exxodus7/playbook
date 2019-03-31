@@ -1,26 +1,107 @@
 package com.schroetech.playbook.ui.simulator;
 
+import com.schroetech.playbook.model.cantstop.CantStop;
 import com.schroetech.playbook.model.common.object.IGame;
 import com.schroetech.playbook.model.common.player.IPlayer;
 import com.schroetech.playbook.persistence.GamingSession;
+import com.schroetech.playbook.ui.PlayBook;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Scanner;
 
 /**
- * A session of one type of game. Could involve multiple play-throughs of that
- * game. Controls the execution of those games and aggregates data
- * appropriately.
+ * Runs simulations of games. Sets up the game session using user command line
+ * input.
  */
 public class Simulator {
 
-    private final Map<String, IPlayer> players = new HashMap();
-    private boolean displayOn = false;
-    private boolean persistData = false;
     private GamingSession session;
+    private Properties properties;
+    private boolean displayOn = false;
+    private boolean saveData = false;
+    private static final String GAMES_KEY = "games";
+    private static final String DELIMETER = ",";
+    private static final String PLAYER_TYPE_KEY_PREFIX = "playerTypes_";
+    private static ArrayList<String> availableGames;
+    private static Map<String, ArrayList<String>> availablePlayerTypes;
+    private Map<String, IPlayer> players;
 
-    public Simulator() {
+    /**
+     * Asks the user about their session preferences.
+     *
+     * @throws IOException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws java.lang.ClassNotFoundException
+     */
+    public void run() throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+
+        Scanner in = new Scanner(System.in);
         session = new GamingSession();
+        players = new HashMap<>();
+
+        loadProperties();
+        PlayBook.displayHeader();
+
+        // setup game type
+        System.out.println("Which game would you like to simulate?");
+        availableGames.forEach((game) -> {
+            int index = availableGames.indexOf(game) + 1;
+            System.out.println(index + ") " + getSimpleClassName(game));
+        });
+        int selection = in.nextInt();
+        in.nextLine();
+
+        // setup players
+        if (selection > 0 && selection <= availableGames.size()) {
+            session.setGameName(availableGames.get(selection - 1));
+            displayGameInfo();
+            setupPlayers();
+        } else {
+            System.out.println("Not a valid option");
+            return;
+        }
+
+        // setup iterations
+        System.out.print("Enter number of iterations: ");
+        session.setNumberOfPlays(in.nextInt());
+        in.nextLine();
+
+        if (session.getNumberOfPlays() != 1) {
+            System.out.println("Warning: You have a high number of iterations.");
+            System.out.println("Turn display on with caution.");
+        }
+
+        // setup display
+        System.out.println("Would you like to turn game display on? (Y/N): ");
+        String displayOnResponse = in.nextLine();
+
+        switch (displayOnResponse) {
+            case "y":
+            case "Y":
+                displayOn = true;
+                break;
+        }
+
+        // setup persistence
+        System.out.println("Would you like to save the session data? (Y/N): ");
+        String saveDataResponse = in.nextLine();
+
+        switch (saveDataResponse) {
+            case "y":
+            case "Y":
+                saveData = true;
+                break;
+        }
+
+        // run the simulation
+        startSession();
     }
 
     /**
@@ -29,12 +110,13 @@ public class Simulator {
      * @return true if the session was run without error, false otherwise.
      * @throws java.lang.InstantiationException
      * @throws java.lang.IllegalAccessException
+     * @throws java.lang.ClassNotFoundException
      */
     public boolean startSession() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         long startTime = System.currentTimeMillis();
 
         Map<String, Integer> numberOfWins = new HashMap();
-        this.getPlayers().keySet().forEach((playerId) -> {
+        players.keySet().forEach((playerId) -> {
             numberOfWins.put(playerId, 0);
         });
 
@@ -42,7 +124,7 @@ public class Simulator {
 
         for (int i = 0; i < session.getNumberOfPlays(); i++) {
             IGame game = (IGame) Class.forName(session.getGameName()).newInstance();
-            game.setPlayers(this.getPlayers());
+            game.setPlayers(players);
             if (!game.play(displayOn)) {
                 return false;
             }
@@ -68,8 +150,8 @@ public class Simulator {
         // print results
         System.out.println();
         System.out.println("Out of " + session.getNumberOfPlays() + " games: ");
-        getPlayers().keySet().forEach((playerId) -> {
-            String playerName = getPlayers().get(playerId).getName();
+        players.keySet().forEach((playerId) -> {
+            String playerName = players.get(playerId).getName();
             int numWins = numberOfWins.get(playerId);
             System.out.printf(" " + playerName + " won " + numWins + " times (%.2f%%),\n", resultPercent(numWins));
         });
@@ -78,64 +160,92 @@ public class Simulator {
         long endTime = System.currentTimeMillis();
         System.out.println("Session completed in " + ((endTime - startTime) / 1000.0) + "ms.");
 
-        if (persistData) {
+        if (saveData) {
+            System.out.println("Saving game data...");
             GamingSession.persist(session);
-            // just for test
-            for (GamingSession session : GamingSession.findAll()) {
-                System.out.println("Persisted, then queried for: ");
-                System.out.println("  " + session.getSessionId());
-                System.out.println("  " + session.getGameName());
-                System.out.println("  " + session.getNumberOfPlays());
-            }
         }
 
         return true;
     }
 
-    /**
-     * Add a player to the game.
-     *
-     * @param newPlayer The player to add.
-     */
-    public void addPlayer(IPlayer newPlayer) {
-        players.put(newPlayer.getId(), newPlayer);
+    private void setupPlayers() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+        Scanner in = new Scanner(System.in);
+
+        IGame game = (IGame) Class.forName(session.getGameName()).newInstance();
+
+        for (int i = 0; i < game.getMaxNumPlayers(); i++) {
+            displayGameInfo();
+            System.out.println("Select a player type.");
+            ArrayList<String> playerTypes = availablePlayerTypes.get(session.getGameName());
+
+            playerTypes.forEach((playerType) -> {
+                int index = playerTypes.indexOf(playerType) + 1;
+                System.out.println(index + ") " + getSimpleClassName(playerType));
+            });
+            if (i >= CantStop.MIN_PLAYERS) {
+                System.out.println((playerTypes.size() + 1) + ") Done");
+            }
+            int selection = in.nextInt();
+            in.nextLine();
+            IPlayer player;
+
+            if (selection > 0 && selection <= playerTypes.size()) {
+                player = (IPlayer) Class.forName(playerTypes.get(selection - 1)).newInstance();
+                System.out.print("Enter a name for your player: ");
+                player.setName(in.nextLine());
+                players.put(player.getId(), player);
+            } else if (i >= CantStop.MIN_PLAYERS && selection == playerTypes.size() + 1) {
+                return;
+            } else {
+                System.out.println("Not a valid option.");
+                i--;
+            }
+        }
     }
 
-    /**
-     * Add multiple players to the game.
-     *
-     * @param newPlayers The players to add.
-     */
-    public void addPlayers(ArrayList<IPlayer> newPlayers) {
-        newPlayers.forEach((newPlayer) -> {
-            players.put(newPlayer.getId(), newPlayer);
+    private void loadProperties() throws FileNotFoundException, IOException {
+        System.out.println("Loading Properties...");
+        properties = new Properties();
+        FileInputStream ip = new FileInputStream(PlayBook.PROPERTIES_FILE);
+        properties.load(ip);
+
+        // load available games
+        availableGames = new ArrayList();
+        String[] gameNames = properties.getProperty(GAMES_KEY).split(DELIMETER);
+        availableGames.addAll(Arrays.asList(gameNames));
+
+        // load available players
+        availablePlayerTypes = new HashMap();
+        availableGames.forEach((game) -> {
+            ArrayList<String> playerTypes = new ArrayList();
+            String key = PLAYER_TYPE_KEY_PREFIX + getSimpleClassName(game);
+            String propertyValue = properties.getProperty(key);
+            if (propertyValue == null) {
+                System.err.println("Property " + key + " isn't configured.");
+            } else {
+                String[] playerTypeNames = properties.getProperty(key).split(DELIMETER);
+                playerTypes.addAll(Arrays.asList(playerTypeNames));
+                availablePlayerTypes.put(game, playerTypes);
+            }
         });
     }
 
-    /**
-     * Gets the players who are a part of the game.
-     *
-     * @return Map representing the players who are a part of the game. The key
-     * to the map is the ID of the associated value, the player.
-     */
-    public Map<String, IPlayer> getPlayers() {
-        return players;
+    private void displayGameInfo() {
+        PlayBook.displayHeader();
+        System.out.println("Game: " + getSimpleClassName(session.getGameName()));
+        System.out.println("Players:");
+        players.values().forEach((player) -> {
+            System.out.println(player.getTypeString() + " (" + player.getName() + ")");
+        });
+        System.out.println("Iterations: " + session.getNumberOfPlays());
     }
 
-    public void setSession(GamingSession newGamingSession) {
-        session = newGamingSession;
-    }
+    private String getSimpleClassName(String className) {
+        if (className == null) {
+            return "";
+        }
 
-    public GamingSession getGamingSession() {
-        return session;
-    }
-
-    public void turnDisplayOn() {
-        displayOn = true;
-    }
-
-    public void turnPersistDataOn() {
-        persistData = true;
+        return className.substring(className.lastIndexOf('.') + 1);
     }
 
     /**

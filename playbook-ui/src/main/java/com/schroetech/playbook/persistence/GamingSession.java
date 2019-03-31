@@ -1,11 +1,7 @@
 package com.schroetech.playbook.persistence;
 
-import com.schroetech.playbook.model.common.object.IGame;
-import com.schroetech.playbook.model.common.player.IPlayer;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -135,8 +131,7 @@ public class GamingSession implements Serializable {
     }
 
     @Override
-    public boolean equals(Object object
-    ) {
+    public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof GamingSession)) {
             return false;
@@ -147,14 +142,6 @@ public class GamingSession implements Serializable {
         }
         return true;
     }
-//
-//    public void turnDisplayOn() {
-//        displayOn = true;
-//    }
-//
-//    public void turnPersistDataOn() {
-//        persistData = true;
-//    }
 
     @Override
     public String toString() {

@@ -1,6 +1,6 @@
 package com.schroetech.playbook.ui;
 
-import com.schroetech.playbook.ui.simulator.SimulatorInterface;
+import com.schroetech.playbook.ui.simulator.Simulator;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -35,7 +35,7 @@ public class PlayBook {
                 in.nextLine();
                 switch (selection) {
                     case 1:
-                        SimulatorInterface sim = new SimulatorInterface();
+                        Simulator sim = new Simulator();
                         sim.run();
                         break;
                     case 2:
