@@ -3,6 +3,7 @@ package com.schroetech.playbook.ui.simulator;
 import com.schroetech.playbook.model.cantstop.CantStop;
 import com.schroetech.playbook.model.common.object.IGame;
 import com.schroetech.playbook.model.common.player.IPlayer;
+import com.schroetech.playbook.model.util.PersistLevel;
 import com.schroetech.playbook.persistence.GamingSession;
 import com.schroetech.playbook.ui.PlayBook;
 import java.io.FileInputStream;
@@ -24,7 +25,7 @@ public class Simulator {
     private GamingSession session;
     private Properties properties;
     private boolean displayOn = false;
-    private boolean saveData = false;
+    private PersistLevel persistLevel = PersistLevel.NONE;
     private static final String GAMES_KEY = "games";
     private static final String DELIMETER = ",";
     private static final String PLAYER_TYPE_KEY_PREFIX = "playerTypes_";
@@ -90,13 +91,18 @@ public class Simulator {
         }
 
         // setup persistence
-        System.out.println("Would you like to save the session data? (Y/N): ");
+        System.out.println("What level of data would you like to save? (none/session/game/move): ");
         String saveDataResponse = in.nextLine();
 
         switch (saveDataResponse) {
-            case "y":
-            case "Y":
-                saveData = true;
+            case "session":
+                persistLevel = PersistLevel.SESSION;
+                break;
+            case "game":
+                persistLevel = PersistLevel.GAME;
+                break;
+            case "move":
+                persistLevel = PersistLevel.MOVE;
                 break;
         }
 
@@ -160,9 +166,10 @@ public class Simulator {
         long endTime = System.currentTimeMillis();
         System.out.println("Session completed in " + ((endTime - startTime) / 1000.0) + "ms.");
 
-        if (saveData) {
-            System.out.println("Saving game data...");
+        if (persistLevel != PersistLevel.NONE) {
+            System.out.print("Saving game data... ");
             GamingSession.persist(session);
+            System.out.println("saved");
         }
 
         return true;

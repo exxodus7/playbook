@@ -45,7 +45,7 @@ public class GamingSession implements Serializable {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    private static final String PERSISTENCE_UNIT = "GamingSessionPU";
+    private static final String PERSISTENCE_UNIT = "GameDataPU";
 
     public GamingSession() {
         this.sessionId = UUID.randomUUID().toString();
