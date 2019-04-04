@@ -183,7 +183,7 @@ public class CantStopGameData extends AbstractGameData implements Serializable {
 
     @Override
     public String toString() {
-        return "com.schroetech.playbook.model.cantstop.persistence.GameDataCantStop[ gameId=" + gameId + " ]";
+        return "com.schroetech.playbook.model.cantstop.persistence.CantStopGameData[ gameId=" + gameId + " ]";
     }
 
 }

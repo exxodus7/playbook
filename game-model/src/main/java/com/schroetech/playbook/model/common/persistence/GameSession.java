@@ -21,14 +21,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author lauren
  */
 @Entity
-@Table(name = "GAMING_SESSION", schema = "APP")
+@Table(name = "GAME_SESSION", schema = "APP")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "GamingSession.findAll", query = "SELECT s FROM GamingSession s"),
-    @NamedQuery(name = "GamingSession.findBySessionId", query = "SELECT s FROM GamingSession s WHERE s.sessionId = :sessionId"),
-    @NamedQuery(name = "GamingSession.findByGameName", query = "SELECT s FROM GamingSession s WHERE s.gameName = :gameName"),
-    @NamedQuery(name = "GamingSession.findByNumberOfPlays", query = "SELECT s FROM GamingSession s WHERE s.numberOfPlays = :numberOfPlays")})
-public class GamingSession implements Serializable {
+    @NamedQuery(name = "GameSession.findAll", query = "SELECT s FROM GameSession s"),
+    @NamedQuery(name = "GameSession.findBySessionId", query = "SELECT s FROM GameSession s WHERE s.sessionId = :sessionId"),
+    @NamedQuery(name = "GameSession.findByGameName", query = "SELECT s FROM GameSession s WHERE s.gameName = :gameName"),
+    @NamedQuery(name = "GameSession.findByNumberOfPlays", query = "SELECT s FROM GameSession s WHERE s.numberOfPlays = :numberOfPlays")})
+public class GameSession implements Serializable {
 
     @Column(name = "NUMBER_OF_PLAYS")
     private Integer numberOfPlays;
@@ -47,25 +47,25 @@ public class GamingSession implements Serializable {
 
     private static final String PERSISTENCE_UNIT = "GameDataPU";
 
-    public GamingSession() {
+    public GameSession() {
         this.sessionId = UUID.randomUUID().toString();
     }
 
-    public GamingSession(String sessionId) {
+    public GameSession(String sessionId) {
         this.sessionId = sessionId;
     }
 
-    public GamingSession(String sessionId, String gameName, int numberOfPlays) {
+    public GameSession(String sessionId, String gameName, int numberOfPlays) {
         this.sessionId = sessionId;
         this.gameName = gameName;
         this.numberOfPlays = numberOfPlays;
     }
 
-    public static List<GamingSession> findAll() {
+    public static List<GameSession> findAll() {
         EntityManagerFactory emfactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
         EntityManager em = emfactory.createEntityManager();
 
-        List<GamingSession> results = em.createNamedQuery("GamingSession.findAll")
+        List<GameSession> results = em.createNamedQuery("GameSession.findAll")
                 .getResultList();
 
         em.close();
@@ -124,10 +124,10 @@ public class GamingSession implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof GamingSession)) {
+        if (!(object instanceof GameSession)) {
             return false;
         }
-        GamingSession other = (GamingSession) object;
+        GameSession other = (GameSession) object;
         if ((this.sessionId == null && other.sessionId != null) || (this.sessionId != null && !this.sessionId.equals(other.sessionId))) {
             return false;
         }
@@ -136,7 +136,7 @@ public class GamingSession implements Serializable {
 
     @Override
     public String toString() {
-        return "com.schroetech.playbook.persistence.GamingSession[ sessionId=" + sessionId + " ]";
+        return "com.schroetech.playbook.persistence.GameSession[ sessionId=" + sessionId + " ]";
     }
 
     public void setNumberOfPlays(Integer numberOfPlays) {

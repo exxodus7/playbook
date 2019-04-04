@@ -4,7 +4,7 @@ import com.schroetech.playbook.model.cantstop.CantStop;
 import com.schroetech.playbook.model.common.object.IGame;
 import com.schroetech.playbook.model.common.player.IPlayer;
 import com.schroetech.playbook.model.util.PersistLevel;
-import com.schroetech.playbook.model.common.persistence.GamingSession;
+import com.schroetech.playbook.model.common.persistence.GameSession;
 import com.schroetech.playbook.model.util.PersistenceUtils;
 import com.schroetech.playbook.ui.PlayBook;
 import java.io.FileInputStream;
@@ -25,7 +25,7 @@ import java.util.Scanner;
  */
 public class Simulator {
 
-    private GamingSession session;
+    private GameSession session;
     private Properties properties;
     private boolean displayOn = false;
     private PersistLevel persistLevel = PersistLevel.NONE;
@@ -47,7 +47,7 @@ public class Simulator {
     public void run() throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 
         Scanner in = new Scanner(System.in);
-        session = new GamingSession();
+        session = new GameSession();
         players = new HashMap<>();
 
         loadProperties();
