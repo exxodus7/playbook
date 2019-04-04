@@ -4,14 +4,17 @@ import com.schroetech.playbook.model.cantstop.CantStop;
 import com.schroetech.playbook.model.common.object.IGame;
 import com.schroetech.playbook.model.common.player.IPlayer;
 import com.schroetech.playbook.model.util.PersistLevel;
-import com.schroetech.playbook.persistence.GamingSession;
+import com.schroetech.playbook.model.common.persistence.GamingSession;
+import com.schroetech.playbook.model.util.PersistenceUtils;
 import com.schroetech.playbook.ui.PlayBook;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
@@ -119,7 +122,7 @@ public class Simulator {
      * @throws java.lang.ClassNotFoundException
      */
     public boolean startSession() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-        long startTime = System.currentTimeMillis();
+        long sessionStart = System.currentTimeMillis();
 
         Map<String, Integer> numberOfWins = new HashMap();
         players.keySet().forEach((playerId) -> {
@@ -127,9 +130,11 @@ public class Simulator {
         });
 
         int numberOfDraws = session.getNumberOfPlays();
+        Collection<Object> gameData = new LinkedList<>();
 
         for (int i = 0; i < session.getNumberOfPlays(); i++) {
             IGame game = (IGame) Class.forName(session.getGameName()).newInstance();
+            game.setSessionId(session.getSessionId());
             game.setPlayers(players);
             if (!game.play(displayOn)) {
                 return false;
@@ -139,6 +144,9 @@ public class Simulator {
             if (winningPlayerId != null) {
                 numberOfWins.put(winningPlayerId, numberOfWins.get(winningPlayerId) + 1);
                 numberOfDraws--;
+            }
+            if (PersistLevel.GAME.equals(persistLevel) || PersistLevel.MOVE.equals(persistLevel)) {
+                gameData.add(game.retrieveGameData());
             }
 
             System.out.print("\r");
@@ -163,13 +171,19 @@ public class Simulator {
         });
         System.out.printf(" And the game was a draw " + numberOfDraws + " times (%.2f%%).\n", resultPercent(numberOfDraws));
 
-        long endTime = System.currentTimeMillis();
-        System.out.println("Session completed in " + ((endTime - startTime) / 1000.0) + "ms.");
+        long sessionEnd = System.currentTimeMillis();
+        System.out.println("Session completed in " + ((sessionEnd - sessionStart) / 1000.0) + "s.");
 
         if (persistLevel != PersistLevel.NONE) {
+            long persistStart = System.currentTimeMillis();
             System.out.print("Saving game data... ");
-            GamingSession.persist(session);
+            PersistenceUtils.persist(session);
+            if (persistLevel != PersistLevel.SESSION) {
+                PersistenceUtils.persistAll(gameData);
+            }
             System.out.println("saved");
+            long persistEnd = System.currentTimeMillis();
+            System.out.println("Persist completed in " + (persistEnd - persistStart) + " ms");
         }
 
         return true;

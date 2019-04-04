@@ -2,8 +2,11 @@ package com.schroetech.playbook.model.common.object;
 
 import com.schroetech.playbook.model.common.player.IPlayer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Abstract class that holds common functionality for all game objects.
@@ -11,13 +14,36 @@ import java.util.Map;
 public abstract class AbstractGame implements IGame {
 
     private final Map<String, IPlayer> players = new HashMap();
-    private String winningPlayerID, currentPlayerID;
+    private String winningPlayerId, currentPlayerId;
     private boolean gameOver = false;
+    protected String gameId;
+    protected List<String> playerOrder;
+    protected boolean display = false;
+    protected String sessionId;
+
+    public AbstractGame() {
+        gameId = UUID.randomUUID().toString();
+    }
+
+    @Override
+    public boolean play(boolean display) {
+        this.display = display;
+        determineTurnOrder();
+        this.setup();
+        return this.start();
+    }
 
     @Override
     public boolean play() {
         return play(false);
     }
+
+    /**
+     * Sets up the game.
+     */
+    protected abstract void setup();
+
+    protected abstract boolean start();
 
     @Override
     public void addPlayer(IPlayer newPlayer) {
@@ -52,21 +78,21 @@ public abstract class AbstractGame implements IGame {
      * @param playerId String representing the ID of the winning player.
      */
     protected void setWinningPlayerId(String playerId) {
-        winningPlayerID = playerId;
+        winningPlayerId = playerId;
     }
 
     @Override
     public String getWinningPlayerId() {
-        return winningPlayerID;
+        return winningPlayerId;
     }
 
     /**
      * Sets the current player.
      *
-     * @param playerID String representing the ID of the current player.
+     * @param playerId String representing the ID of the current player.
      */
-    protected void setCurrentPlayerId(String playerID) {
-        currentPlayerID = playerID;
+    protected void setCurrentPlayerId(String playerId) {
+        currentPlayerId = playerId;
     }
 
     /**
@@ -75,7 +101,17 @@ public abstract class AbstractGame implements IGame {
      * @return String representing the ID of the current player.
      */
     public String getCurrentPlayerId() {
-        return currentPlayerID;
+        return currentPlayerId;
+    }
+
+    @Override
+    public void setSessionId(String newSessionId) {
+        sessionId = newSessionId;
+    }
+
+    @Override
+    public String getSessionId() {
+        return sessionId;
     }
 
     @Override
@@ -116,9 +152,15 @@ public abstract class AbstractGame implements IGame {
         System.out.println("Final board setup:");
         displayGameStateToConsole();
     }
-    
+
     protected static void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+    }
+
+    protected void determineTurnOrder() {
+        // Set turn order.
+        playerOrder = new ArrayList(this.getPlayers().keySet());
+        Collections.shuffle(playerOrder);
     }
 }

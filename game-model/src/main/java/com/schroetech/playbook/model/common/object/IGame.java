@@ -1,5 +1,6 @@
 package com.schroetech.playbook.model.common.object;
 
+import com.schroetech.playbook.model.common.persistence.AbstractGameData;
 import com.schroetech.playbook.model.common.player.IPlayer;
 import java.util.ArrayList;
 import java.util.Map;
@@ -64,6 +65,10 @@ public interface IGame {
      */
     public Map<String, IPlayer> getPlayers();
 
+    public void setSessionId(String newSessionId);
+
+    public String getSessionId();
+
     /**
      * Gets the number of players who are playing the game.
      *
@@ -101,6 +106,8 @@ public interface IGame {
      * Prints the current state of the board to the console.
      */
     public void displayGameStateToConsole();
-    
+
     public String getName();
+
+    public AbstractGameData retrieveGameData();
 }

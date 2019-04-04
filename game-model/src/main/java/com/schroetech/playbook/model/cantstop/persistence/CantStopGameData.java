@@ -1,15 +1,13 @@
 package com.schroetech.playbook.model.cantstop.persistence;
 
+import com.schroetech.playbook.model.common.persistence.AbstractGameData;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Persistence;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -18,21 +16,21 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author lauren
  */
 @Entity
-@Table(name = "CANTSTOP_GAMEDATA")
+@Table(name = "GAMEDATA_CANTSTOP", schema = "APP")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "CantStopGameData.findAll", query = "SELECT c FROM CantStopGameData c"),
-    @NamedQuery(name = "CantStopGameData.findByGameId", query = "SELECT c FROM CantStopGameData c WHERE c.gameId = :gameId"),
-    @NamedQuery(name = "CantStopGameData.findBySessionId", query = "SELECT c FROM CantStopGameData c WHERE c.sessionId = :sessionId"),
-    @NamedQuery(name = "CantStopGameData.findByPlayer1Id", query = "SELECT c FROM CantStopGameData c WHERE c.player1Id = :player1Id"),
-    @NamedQuery(name = "CantStopGameData.findByPlayer2Id", query = "SELECT c FROM CantStopGameData c WHERE c.player2Id = :player2Id"),
-    @NamedQuery(name = "CantStopGameData.findByPlayer3Id", query = "SELECT c FROM CantStopGameData c WHERE c.player3Id = :player3Id"),
-    @NamedQuery(name = "CantStopGameData.findByPlayer4Id", query = "SELECT c FROM CantStopGameData c WHERE c.player4Id = :player4Id"),
-    @NamedQuery(name = "CantStopGameData.findByPlayer1Won", query = "SELECT c FROM CantStopGameData c WHERE c.player1Won = :player1Won"),
-    @NamedQuery(name = "CantStopGameData.findByPlayer2Won", query = "SELECT c FROM CantStopGameData c WHERE c.player2Won = :player2Won"),
-    @NamedQuery(name = "CantStopGameData.findByPlayer3Won", query = "SELECT c FROM CantStopGameData c WHERE c.player3Won = :player3Won"),
-    @NamedQuery(name = "CantStopGameData.findByPlayer4Won", query = "SELECT c FROM CantStopGameData c WHERE c.player4Won = :player4Won")})
-public class CantStopGameData implements Serializable {
+    @NamedQuery(name = "CantStopGameData.findAll", query = "SELECT g FROM CantStopGameData g"),
+    @NamedQuery(name = "CantStopGameData.findByGameId", query = "SELECT g FROM CantStopGameData g WHERE g.gameId = :gameId"),
+    @NamedQuery(name = "CantStopGameData.findBySessionId", query = "SELECT g FROM CantStopGameData g WHERE g.sessionId = :sessionId"),
+    @NamedQuery(name = "CantStopGameData.findByPlayer1Id", query = "SELECT g FROM CantStopGameData g WHERE g.player1Id = :player1Id"),
+    @NamedQuery(name = "CantStopGameData.findByPlayer2Id", query = "SELECT g FROM CantStopGameData g WHERE g.player2Id = :player2Id"),
+    @NamedQuery(name = "CantStopGameData.findByPlayer3Id", query = "SELECT g FROM CantStopGameData g WHERE g.player3Id = :player3Id"),
+    @NamedQuery(name = "CantStopGameData.findByPlayer4Id", query = "SELECT g FROM CantStopGameData g WHERE g.player4Id = :player4Id"),
+    @NamedQuery(name = "CantStopGameData.findByPlayer1Place", query = "SELECT g FROM CantStopGameData g WHERE g.player1Place = :player1Place"),
+    @NamedQuery(name = "CantStopGameData.findByPlayer2Place", query = "SELECT g FROM CantStopGameData g WHERE g.player2Place = :player2Place"),
+    @NamedQuery(name = "CantStopGameData.findByPlayer3Place", query = "SELECT g FROM CantStopGameData g WHERE g.player3Place = :player3Place"),
+    @NamedQuery(name = "CantStopGameData.findByPlayer4Place", query = "SELECT g FROM CantStopGameData g WHERE g.player4Place = :player4Place")})
+public class CantStopGameData extends AbstractGameData implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -52,16 +50,18 @@ public class CantStopGameData implements Serializable {
     private String player3Id;
     @Column(name = "PLAYER4_ID")
     private String player4Id;
-    @Column(name = "PLAYER1_WON")
-    private Boolean player1Won;
-    @Column(name = "PLAYER2_WON")
-    private Boolean player2Won;
-    @Column(name = "PLAYER3_WON")
-    private Boolean player3Won;
-    @Column(name = "PLAYER4_WON")
-    private Boolean player4Won;
-
-    private static String PERSISTENCE_UNIT = "GameDataPU";
+    @Basic(optional = false)
+    @Column(name = "PLAYER1_PLACE")
+    private int player1Place;
+    @Basic(optional = false)
+    @Column(name = "PLAYER2_PLACE")
+    private int player2Place;
+    @Basic(optional = false)
+    @Column(name = "PLAYER3_PLACE")
+    private int player3Place;
+    @Basic(optional = false)
+    @Column(name = "PLAYER4_PLACE")
+    private int player4Place;
 
     public CantStopGameData() {
     }
@@ -70,20 +70,15 @@ public class CantStopGameData implements Serializable {
         this.gameId = gameId;
     }
 
-    public CantStopGameData(String gameId, String sessionId, String player1Id, String player2Id) {
+    public CantStopGameData(String gameId, String sessionId, String player1Id, String player2Id, int player1Place, int player2Place, int player3Place, int player4Place) {
         this.gameId = gameId;
         this.sessionId = sessionId;
         this.player1Id = player1Id;
         this.player2Id = player2Id;
-    }
-
-    public static void persist(CantStopGameData cantStopGameData) {
-        EntityManagerFactory emfactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
-        EntityManager em = emfactory.createEntityManager();
-
-        em.getTransaction().begin();
-        em.persist(cantStopGameData);
-        em.getTransaction().commit();
+        this.player1Place = player1Place;
+        this.player2Place = player2Place;
+        this.player3Place = player3Place;
+        this.player4Place = player4Place;
     }
 
     public String getGameId() {
@@ -134,36 +129,36 @@ public class CantStopGameData implements Serializable {
         this.player4Id = player4Id;
     }
 
-    public Boolean getPlayer1Won() {
-        return player1Won;
+    public int getPlayer1Place() {
+        return player1Place;
     }
 
-    public void setPlayer1Won(Boolean player1Won) {
-        this.player1Won = player1Won;
+    public void setPlayer1Place(int player1Place) {
+        this.player1Place = player1Place;
     }
 
-    public Boolean getPlayer2Won() {
-        return player2Won;
+    public int getPlayer2Place() {
+        return player2Place;
     }
 
-    public void setPlayer2Won(Boolean player2Won) {
-        this.player2Won = player2Won;
+    public void setPlayer2Place(int player2Place) {
+        this.player2Place = player2Place;
     }
 
-    public Boolean getPlayer3Won() {
-        return player3Won;
+    public int getPlayer3Place() {
+        return player3Place;
     }
 
-    public void setPlayer3Won(Boolean player3Won) {
-        this.player3Won = player3Won;
+    public void setPlayer3Place(int player3Place) {
+        this.player3Place = player3Place;
     }
 
-    public Boolean getPlayer4Won() {
-        return player4Won;
+    public int getPlayer4Place() {
+        return player4Place;
     }
 
-    public void setPlayer4Won(Boolean player4Won) {
-        this.player4Won = player4Won;
+    public void setPlayer4Place(int player4Place) {
+        this.player4Place = player4Place;
     }
 
     @Override
@@ -188,7 +183,7 @@ public class CantStopGameData implements Serializable {
 
     @Override
     public String toString() {
-        return "com.schroetech.playbook.model.cantstop.persistence.CantStopGameData[ gameId=" + gameId + " ]";
+        return "com.schroetech.playbook.model.cantstop.persistence.GameDataCantStop[ gameId=" + gameId + " ]";
     }
 
 }

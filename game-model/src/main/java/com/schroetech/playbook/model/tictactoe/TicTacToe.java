@@ -1,8 +1,10 @@
 package com.schroetech.playbook.model.tictactoe;
 
 import com.schroetech.playbook.model.common.object.AbstractSimpleTurnGame;
+import com.schroetech.playbook.model.common.persistence.AbstractGameData;
 import com.schroetech.playbook.model.tictactoe.object.TicTacToePlayerMarker;
 import com.schroetech.playbook.model.tictactoe.object.TicTacToeSpace;
+import com.schroetech.playbook.model.tictactoe.persistence.TicTacToeGameData;
 import com.schroetech.playbook.model.tictactoe.player.AbstractTicTacToePlayer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -177,9 +179,30 @@ public class TicTacToe extends AbstractSimpleTurnGame {
             return position.toString();
         }
     }
-    
+
     @Override
     public String getName() {
         return "Tic Tac Toe";
+    }
+
+    @Override
+    public AbstractGameData retrieveGameData() {
+        TicTacToeGameData gameData = new TicTacToeGameData();
+        gameData.setSessionId(sessionId);
+        gameData.setGameId(gameId);
+        // set player 1 info
+        gameData.setPlayer1Id(this.playerOrder.get(0));
+        if (gameData.getPlayer1Id().equals(this.getWinningPlayerId())) {
+            gameData.setPlayer1Place(1);
+            gameData.setPlayer2Place(2);
+        }
+        // set player 2 info
+        gameData.setPlayer2Id(this.playerOrder.get(1));
+        if (gameData.getPlayer2Id().equals(this.getWinningPlayerId())) {
+            gameData.setPlayer1Place(2);
+            gameData.setPlayer2Place(1);
+        }
+
+        return gameData;
     }
 }

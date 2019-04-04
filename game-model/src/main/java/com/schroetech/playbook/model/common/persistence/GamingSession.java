@@ -1,4 +1,4 @@
-package com.schroetech.playbook.persistence;
+package com.schroetech.playbook.model.common.persistence;
 
 import java.io.Serializable;
 import java.util.List;
@@ -72,15 +72,6 @@ public class GamingSession implements Serializable {
         emfactory.close();
 
         return results;
-    }
-
-    public static void persist(GamingSession session) {
-        EntityManagerFactory emfactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
-        EntityManager em = emfactory.createEntityManager();
-
-        em.getTransaction().begin();
-        em.persist(session);
-        em.getTransaction().commit();
     }
 
     public String getSessionId() {

@@ -3,8 +3,10 @@ package com.schroetech.playbook.model.cantstop;
 import com.schroetech.playbook.game.model.common.object.Dice;
 import com.schroetech.playbook.game.model.util.GameUtils;
 import com.schroetech.playbook.model.cantstop.object.CantStopBoard;
+import com.schroetech.playbook.model.cantstop.persistence.CantStopGameData;
 import com.schroetech.playbook.model.cantstop.player.AbstractCantStopPlayer;
 import com.schroetech.playbook.model.common.object.AbstractSimpleTurnGame;
+import com.schroetech.playbook.model.common.persistence.AbstractGameData;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -183,6 +185,37 @@ public class CantStop extends AbstractSimpleTurnGame {
     }
 
     @Override
+    public AbstractGameData retrieveGameData() {
+        CantStopGameData gameData = new CantStopGameData();
+        gameData.setSessionId(sessionId);
+        gameData.setGameId(gameId);
+        // set player 1 info
+        gameData.setPlayer1Id(this.playerOrder.get(0));
+        if (gameData.getPlayer1Id().equals(this.getWinningPlayerId())) {
+            gameData.setPlayer1Place(1);
+        }
+        // set player 2 info
+        gameData.setPlayer2Id(this.playerOrder.get(1));
+        if (gameData.getPlayer2Id().equals(this.getWinningPlayerId())) {
+            gameData.setPlayer2Place(1);
+        }
+        if (this.playerOrder.size() >= 3) {
+            gameData.setPlayer3Id(this.playerOrder.get(2));
+            if (gameData.getPlayer3Id().equals(this.getWinningPlayerId())) {
+                gameData.setPlayer3Place(1);
+            }
+        }
+        if (this.playerOrder.size() == 4) {
+            gameData.setPlayer4Id(this.playerOrder.get(3));
+            if (gameData.getPlayer4Id().equals(this.getWinningPlayerId())) {
+                gameData.setPlayer4Place(1);
+            }
+        }
+
+        return gameData;
+    }
+
+    @Override
     public int getMinNumPlayers() {
         return MIN_PLAYERS;
     }
@@ -202,7 +235,7 @@ public class CantStop extends AbstractSimpleTurnGame {
 
         board.printBoardState();
     }
-    
+
     @Override
     public String getName() {
         return "Can't Stop";

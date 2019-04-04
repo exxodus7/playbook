@@ -1,5 +1,6 @@
 package com.schroetech.playbook.model.common.object;
 
+import com.schroetech.playbook.model.cantstop.persistence.CantStopGameData;
 import com.schroetech.playbook.model.cantstop.player.RandomCantStopPlayer;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -59,6 +60,11 @@ public class AbstractSimpleTurnGameTest {
         @Override
         public String getName() {
             return "";
+        }
+
+        @Override
+        public CantStopGameData retrieveGameData() {
+            return new CantStopGameData();
         }
     }
 }

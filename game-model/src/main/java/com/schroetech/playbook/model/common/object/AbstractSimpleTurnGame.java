@@ -1,21 +1,12 @@
 package com.schroetech.playbook.model.common.object;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * Represents a game where the players take turns.
  */
 public abstract class AbstractSimpleTurnGame extends AbstractGame {
-    
-    protected boolean display = false;
 
     @Override
-    public boolean play(boolean display) {
-
-        this.display = display;
-        this.setup();
+    public boolean start() {
 
         // Check for a correct number of players.
         if (this.getNumPlayers() < this.getMinNumPlayers()
@@ -28,12 +19,8 @@ public abstract class AbstractSimpleTurnGame extends AbstractGame {
             return false;
         }
 
-        // Set turn order.
-        List<String> playerIds = new ArrayList(this.getPlayers().keySet());
-        Collections.shuffle(playerIds);
-        
         while (!this.isGameOver()) {
-            for (String playerId : playerIds) {
+            for (String playerId : playerOrder) {
                 setCurrentPlayerId(playerId);
                 if (!playerTurn()) {
                     System.out.println(this.getPlayers().get(playerId).getName() + " (" + playerId + ") ran into a problem executing their turn.");
@@ -57,11 +44,6 @@ public abstract class AbstractSimpleTurnGame extends AbstractGame {
 
         return true;
     }
-
-    /**
-     * Sets up the game.
-     */
-    protected abstract void setup();
 
     /**
      * Sets up a player's turn and calls that player to take their turn.
