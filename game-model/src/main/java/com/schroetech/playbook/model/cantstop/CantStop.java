@@ -9,7 +9,9 @@ import com.schroetech.playbook.model.common.object.AbstractSimpleTurnGame;
 import com.schroetech.playbook.model.common.persistence.AbstractGameData;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -189,30 +191,76 @@ public class CantStop extends AbstractSimpleTurnGame {
         CantStopGameData gameData = new CantStopGameData();
         gameData.setSessionId(sessionId);
         gameData.setGameId(gameId);
+        Map<String, Integer> placeResults = getPlaceResults();
         // set player 1 info
-        gameData.setPlayer1Id(this.playerOrder.get(0));
-        if (gameData.getPlayer1Id().equals(this.getWinningPlayerId())) {
-            gameData.setPlayer1Place(1);
-        }
+        String player1Id = this.playerOrder.get(0);
+        gameData.setPlayer1Id(player1Id);
+        gameData.setPlayer1Place(placeResults.get(player1Id));
+        gameData.setPlayer1Score(board.getNumAscendedColumnsByPlayerId(player1Id));
         // set player 2 info
-        gameData.setPlayer2Id(this.playerOrder.get(1));
-        if (gameData.getPlayer2Id().equals(this.getWinningPlayerId())) {
-            gameData.setPlayer2Place(1);
+        String player2Id = this.playerOrder.get(1);
+        gameData.setPlayer2Id(player2Id);
+        gameData.setPlayer2Place(placeResults.get(player2Id));
+        gameData.setPlayer2Score(board.getNumAscendedColumnsByPlayerId(player2Id));
+        // set player 3 info
+        if (this.getNumPlayers() >= 3) {
+            String player3Id = this.playerOrder.get(2);
+            gameData.setPlayer3Id(player3Id);
+            gameData.setPlayer3Place(placeResults.get(player3Id));
+            gameData.setPlayer3Score(board.getNumAscendedColumnsByPlayerId(player3Id));
         }
-        if (this.playerOrder.size() >= 3) {
-            gameData.setPlayer3Id(this.playerOrder.get(2));
-            if (gameData.getPlayer3Id().equals(this.getWinningPlayerId())) {
-                gameData.setPlayer3Place(1);
-            }
-        }
-        if (this.playerOrder.size() == 4) {
-            gameData.setPlayer4Id(this.playerOrder.get(3));
-            if (gameData.getPlayer4Id().equals(this.getWinningPlayerId())) {
-                gameData.setPlayer4Place(1);
-            }
+        // set player 4 info
+        if (this.getNumPlayers() == 4) {
+            String player4Id = this.playerOrder.get(3);
+            gameData.setPlayer4Id(player4Id);
+            gameData.setPlayer4Place(placeResults.get(player4Id));
+            gameData.setPlayer4Score(board.getNumAscendedColumnsByPlayerId(player4Id));
         }
 
         return gameData;
+    }
+
+    private Map<String, Integer> getPlaceResults() {
+        Map<String, Integer> placeResults = new HashMap<>();
+
+        // 1st group
+        int place = 1;
+        int playersWhoPlaced = 0;
+        for (String player : this.playerOrder) {
+            if (board.getNumAscendedColumnsByPlayerId(player) >= 3) {
+                placeResults.put(player, place);
+                playersWhoPlaced++;
+            }
+        }
+
+        // 2nd group
+        place = playersWhoPlaced + 1;
+        for (String player : this.playerOrder) {
+            if (board.getNumAscendedColumnsByPlayerId(player) == 2) {
+                placeResults.put(player, place);
+                playersWhoPlaced++;
+            }
+        }
+
+        // 3rd group
+        place = playersWhoPlaced + 1;
+        for (String player : this.playerOrder) {
+            if (board.getNumAscendedColumnsByPlayerId(player) == 1) {
+                placeResults.put(player, place);
+                playersWhoPlaced++;
+            }
+        }
+
+        // 4th group
+        place = playersWhoPlaced + 1;
+        for (String player : this.playerOrder) {
+            if (board.getNumAscendedColumnsByPlayerId(player) == 0) {
+                placeResults.put(player, place);
+                playersWhoPlaced++;
+            }
+        }
+
+        return placeResults;
     }
 
     @Override

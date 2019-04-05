@@ -183,7 +183,7 @@ public class Simulator {
             }
             System.out.println("saved");
             long persistEnd = System.currentTimeMillis();
-            System.out.println("Persist completed in " + (persistEnd - persistStart) + " ms");
+            System.out.println("Persist completed in " + ((persistEnd - persistStart) / 1000) + " s");
         }
 
         return true;

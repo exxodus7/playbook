@@ -62,6 +62,18 @@ public class CantStopGameData extends AbstractGameData implements Serializable {
     @Basic(optional = false)
     @Column(name = "PLAYER4_PLACE")
     private int player4Place;
+    @Basic(optional = true)
+    @Column(name = "PLAYER1_SCORE")
+    private int player1Score;
+    @Basic(optional = true)
+    @Column(name = "PLAYER2_SCORE")
+    private int player2Score;
+    @Basic(optional = true)
+    @Column(name = "PLAYER3_SCORE")
+    private int player3Score;
+    @Basic(optional = true)
+    @Column(name = "PLAYER4_SCORE")
+    private int player4Score;
 
     public CantStopGameData() {
     }
@@ -159,6 +171,38 @@ public class CantStopGameData extends AbstractGameData implements Serializable {
 
     public void setPlayer4Place(int player4Place) {
         this.player4Place = player4Place;
+    }
+
+    public int getPlayer1Score() {
+        return player1Score;
+    }
+
+    public void setPlayer1Score(int player1Score) {
+        this.player1Score = player1Score;
+    }
+
+    public int getPlayer2Score() {
+        return player2Score;
+    }
+
+    public void setPlayer2Score(int player2Score) {
+        this.player2Score = player2Score;
+    }
+
+    public int getPlayer3Score() {
+        return player3Score;
+    }
+
+    public void setPlayer3Score(int player3Score) {
+        this.player3Score = player3Score;
+    }
+
+    public int getPlayer4Score() {
+        return player4Score;
+    }
+
+    public void setPlayer4Score(int player4Score) {
+        this.player4Score = player4Score;
     }
 
     @Override
