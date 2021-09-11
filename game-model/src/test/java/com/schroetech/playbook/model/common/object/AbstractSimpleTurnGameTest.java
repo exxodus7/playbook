@@ -1,5 +1,7 @@
 package com.schroetech.playbook.model.common.object;
 
+import com.schroetech.playbook.model.common.persistence.AbstractGameData;
+import com.schroetech.playbook.model.common.player.AbstractPlayer;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -59,8 +61,18 @@ public class AbstractSimpleTurnGameTest {
         public String getName() {
             return "";
         }
+
+        @Override
+        public AbstractGameData retrieveGameData() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
     }
 
     public class AbstractPlayerImpl extends AbstractPlayer {
+
+        @Override
+        public String getTypeString() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.schroetech.playbook.ui.simulator;
 
-import com.schroetech.playbook.model.cantstop.CantStop;
+import com.schroetech.game.cantstop.CantStop;
 import com.schroetech.playbook.model.common.object.IGame;
 import com.schroetech.playbook.model.common.player.IPlayer;
 import com.schroetech.playbook.model.util.PersistLevel;
