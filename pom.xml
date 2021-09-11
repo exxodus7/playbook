@@ -8,6 +8,7 @@
     <modules>
         <module>game-model</module>
         <module>playbook-ui</module>
+        <module>games</module>
     </modules>
     <dependencies>
         <dependency>
