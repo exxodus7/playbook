@@ -61,6 +61,7 @@ public class PlayBook {
                 }
             } catch (IOException | InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
                 System.out.println("Error setting up the session.");
+                System.out.println(ex);
                 return;
             }
         }

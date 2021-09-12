@@ -140,7 +140,7 @@ public class TicTacToeGameData extends AbstractGameData implements Serializable 
 
     @Override
     public String toString() {
-        return "com.schroetech.playbook.model.tictactoe.persistence.TicTacToeGameData[ gameId=" + gameId + " ]";
+        return "com.schroetech.stictactoe.persistence.TicTacToeGameData[ gameId=" + gameId + " ]";
     }
 
 }
