@@ -13,3 +13,9 @@
 /games/cant-stop/target/
 /oldgames/cant-stop/target/
 /game/target/
+/games/target/
+/object-model/target/
+/console-ui/target/
+/emulator/target/
+/common/target/
+/console/target/
