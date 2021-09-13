@@ -16,7 +16,7 @@ import javax.persistence.Persistence;
  */
 public class PersistenceUtils {
 
-    public static final String PERSISTENCE_UNIT = "GameDataPU";
+    public static final String PERSISTENCE_UNIT = "PlayBookDataPU";
 
     public static void persist(Object object) {
         EntityManagerFactory emfactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);

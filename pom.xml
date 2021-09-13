@@ -6,9 +6,9 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>emulator</module>
-        <module>games</module>
         <module>common</module>
+        <module>games</module>
+        <module>emulator</module>
         <module>console</module>
     </modules>
     <dependencies>

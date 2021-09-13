@@ -5,6 +5,7 @@
  */
 package com.crucible.playbook.game.tictactoe.persistence;
 
+import com.crucible.playbook.common.persistence.AbstractMoveData;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -23,13 +24,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "MOVEDATA_TICTACTOE")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "MovedataTictactoe.findAll", query = "SELECT m FROM MovedataTictactoe m"),
-    @NamedQuery(name = "MovedataTictactoe.findByGameId", query = "SELECT m FROM MovedataTictactoe m WHERE m.gameId = :gameId"),
-    @NamedQuery(name = "MovedataTictactoe.findByMoveId", query = "SELECT m FROM MovedataTictactoe m WHERE m.moveId = :moveId"),
-    @NamedQuery(name = "MovedataTictactoe.findByPlayerId", query = "SELECT m FROM MovedataTictactoe m WHERE m.playerId = :playerId"),
-    @NamedQuery(name = "MovedataTictactoe.findByCol", query = "SELECT m FROM MovedataTictactoe m WHERE m.col = :col"),
-    @NamedQuery(name = "MovedataTictactoe.findByRow", query = "SELECT m FROM MovedataTictactoe m WHERE m.row = :row")})
-public class TicTacToeMoveData implements Serializable {
+    @NamedQuery(name = "TicTacToeMoveData.findAll", query = "SELECT m FROM TicTacToeMoveData m"),
+    @NamedQuery(name = "TicTacToeMoveData.findByGameId", query = "SELECT m FROM TicTacToeMoveData m WHERE m.gameId = :gameId"),
+    @NamedQuery(name = "TicTacToeMoveData.findByMoveId", query = "SELECT m FROM TicTacToeMoveData m WHERE m.moveId = :moveId"),
+    @NamedQuery(name = "TicTacToeMoveData.findByPlayerId", query = "SELECT m FROM TicTacToeMoveData m WHERE m.playerId = :playerId"),
+    @NamedQuery(name = "TicTacToeMoveData.findByCol", query = "SELECT m FROM TicTacToeMoveData m WHERE m.col = :col"),
+    @NamedQuery(name = "TicTacToeMoveData.findByRow", query = "SELECT m FROM TicTacToeMoveData m WHERE m.row = :row")})
+public class TicTacToeMoveData extends AbstractMoveData implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
@@ -126,7 +127,7 @@ public class TicTacToeMoveData implements Serializable {
 
     @Override
     public String toString() {
-        return "com.crucible.playbook.game.cantstop.persistence.MovedataTictactoe[ moveId=" + moveId + " ]";
+        return "com.crucible.playbook.game.tictactoe.persistence.TicTacToeMoveData[ moveId=" + moveId + " ]";
     }
     
 }

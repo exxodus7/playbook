@@ -2,15 +2,20 @@ package com.crucible.playbook.game.tictactoe;
 
 import com.crucible.playbook.common.game.AbstractSimpleTurnGame;
 import com.crucible.playbook.common.persistence.AbstractGameData;
+import com.crucible.playbook.common.persistence.AbstractMoveData;
 import com.crucible.playbook.game.tictactoe.object.TicTacToePlayerMarker;
 import com.crucible.playbook.game.tictactoe.object.TicTacToeSpace;
 import com.crucible.playbook.game.tictactoe.persistence.TicTacToeGameData;
+import com.crucible.playbook.game.tictactoe.persistence.TicTacToeMoveData;
 import com.crucible.playbook.game.tictactoe.player.AbstractTicTacToePlayer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * Implementation of the game Tic-Tac-Toe.
@@ -24,6 +29,7 @@ public class TicTacToe extends AbstractSimpleTurnGame {
     private int moveCount = 0;
     private final TicTacToePlayerMarker[][] board = new TicTacToePlayerMarker[3][3];
     private Map<String, TicTacToePlayerMarker> playerAssignment;
+    private Collection<AbstractMoveData> moveData;
 
     /**
      * Sets up the game. Assigns player markers and determines turn order.
@@ -40,6 +46,7 @@ public class TicTacToe extends AbstractSimpleTurnGame {
         this.setCurrentPlayerId(playerIds.get(firstPlayer));
         playerAssignment.put(playerIds.get(firstPlayer), TicTacToePlayerMarker.X);
         playerAssignment.put(playerIds.get(1 - firstPlayer), TicTacToePlayerMarker.O);
+        moveData = new LinkedList();
     }
 
     @Override
@@ -54,7 +61,19 @@ public class TicTacToe extends AbstractSimpleTurnGame {
         board[moveLocation.getRow()][moveLocation.getColumn()] = playerAssignment.get(getCurrentPlayerId());
         moveCount++;
         victoryCheck(moveLocation);
+        addMoveData(moveLocation);
         return true;
+    }
+    
+    private void addMoveData(TicTacToeSpace moveLocation) {
+        TicTacToeMoveData move = new TicTacToeMoveData();
+        move.setGameId(gameId);
+        move.setMoveId(UUID.randomUUID().toString());
+        move.setPlayerId(getCurrentPlayerId());
+        move.setRow(moveLocation.getRow());
+        move.setCol(moveLocation.getColumn());
+        
+        moveData.add(move);
     }
 
     /**
@@ -204,5 +223,10 @@ public class TicTacToe extends AbstractSimpleTurnGame {
         }
 
         return gameData;
+    }
+    
+    @Override
+    public Collection<AbstractMoveData> retrieveMoveData() {
+        return moveData;
     }
 }

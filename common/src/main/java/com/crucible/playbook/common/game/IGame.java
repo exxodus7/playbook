@@ -1,8 +1,11 @@
 package com.crucible.playbook.common.game;
 
-import com.crucible.playbook.common.persistence.AbstractGameData;
 import com.crucible.playbook.common.game.player.IPlayer;
+import com.crucible.playbook.common.persistence.AbstractGameData;
+import com.crucible.playbook.common.persistence.AbstractMoveData;
+import com.crucible.playbook.common.util.PersistLevel;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -68,6 +71,10 @@ public interface IGame {
     public void setSessionId(String newSessionId);
 
     public String getSessionId();
+    
+    public void setPersistLevel(PersistLevel newPersistLevel);
+
+    public PersistLevel getPersistLevel();
 
     /**
      * Gets the number of players who are playing the game.
@@ -110,4 +117,6 @@ public interface IGame {
     public String getName();
 
     public AbstractGameData retrieveGameData();
+    
+    public Collection<AbstractMoveData> retrieveMoveData();
 }

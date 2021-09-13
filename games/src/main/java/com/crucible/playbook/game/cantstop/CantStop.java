@@ -8,6 +8,7 @@ package com.crucible.playbook.game.cantstop;
 import com.crucible.playbook.common.game.AbstractSimpleTurnGame;
 import com.crucible.playbook.common.game.object.Dice;
 import com.crucible.playbook.common.persistence.AbstractGameData;
+import com.crucible.playbook.common.persistence.AbstractMoveData;
 import com.crucible.playbook.common.util.GameUtils;
 import com.crucible.playbook.game.cantstop.player.AbstractCantStopPlayer;
 import com.crucible.playbook.game.cantstop.object.CantStopBoard;
@@ -292,5 +293,10 @@ public class CantStop extends AbstractSimpleTurnGame {
     @Override
     public String getName() {
         return "Can't Stop";
+    }
+
+    @Override
+    public Collection<AbstractMoveData> retrieveMoveData() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

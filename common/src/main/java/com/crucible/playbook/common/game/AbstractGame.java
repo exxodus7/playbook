@@ -1,6 +1,7 @@
 package com.crucible.playbook.common.game;
 
 import com.crucible.playbook.common.game.player.IPlayer;
+import com.crucible.playbook.common.util.PersistLevel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ public abstract class AbstractGame implements IGame {
     protected List<String> playerOrder;
     protected boolean display = false;
     protected String sessionId;
+    private PersistLevel persistLevel;
 
     public AbstractGame() {
         gameId = UUID.randomUUID().toString();
@@ -113,6 +115,16 @@ public abstract class AbstractGame implements IGame {
     public String getSessionId() {
         return sessionId;
     }
+    
+    @Override
+    public void setPersistLevel(PersistLevel newPersistLevel) {
+        persistLevel = newPersistLevel;
+    }
+
+    @Override
+    public PersistLevel getPersistLevel() {
+        return persistLevel;
+    }
 
     @Override
     public boolean isGameOver() {
@@ -163,4 +175,5 @@ public abstract class AbstractGame implements IGame {
         playerOrder = new ArrayList(this.getPlayers().keySet());
         Collections.shuffle(playerOrder);
     }
+    
 }

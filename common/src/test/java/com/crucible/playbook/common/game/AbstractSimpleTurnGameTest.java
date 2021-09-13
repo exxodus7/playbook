@@ -3,6 +3,8 @@ package com.crucible.playbook.common.game;
 import com.crucible.playbook.common.game.AbstractSimpleTurnGame;
 import com.crucible.playbook.common.persistence.AbstractGameData;
 import com.crucible.playbook.common.game.player.AbstractPlayer;
+import com.crucible.playbook.common.persistence.AbstractMoveData;
+import java.util.Collection;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -65,6 +67,11 @@ public class AbstractSimpleTurnGameTest {
 
         @Override
         public AbstractGameData retrieveGameData() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Collection<AbstractMoveData> retrieveMoveData() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }

@@ -135,6 +135,7 @@ public class Emulator {
             IGame game = (IGame) Class.forName(session.getGameName()).newInstance();
             game.setSessionId(session.getSessionId());
             game.setPlayers(players);
+            game.setPersistLevel(persistLevel);
             if (!game.play(displayOn)) {
                 return false;
             }
@@ -146,6 +147,10 @@ public class Emulator {
             }
             if (PersistLevel.GAME.equals(persistLevel) || PersistLevel.MOVE.equals(persistLevel)) {
                 gameData.add(game.retrieveGameData());
+            }
+            
+            if (PersistLevel.MOVE.equals(persistLevel)) {
+                gameData.addAll(game.retrieveMoveData());
             }
 
             System.out.print("\r");
