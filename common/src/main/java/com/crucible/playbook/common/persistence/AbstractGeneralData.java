@@ -7,8 +7,14 @@ package com.crucible.playbook.common.persistence;
 
 /**
  *
- * @author lauren
+ * @author exxod
  */
-public class AbstractMoveData {
+public class AbstractGeneralData extends AbstractData {
     
+    public static final String PERSISTENCE_UNIT = "GeneralDataPU";
+    
+    @Override
+    public String getPersistenceUnit() {
+        return PERSISTENCE_UNIT;
+    }
 }

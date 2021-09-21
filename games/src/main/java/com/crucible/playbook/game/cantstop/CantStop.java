@@ -8,16 +8,18 @@ package com.crucible.playbook.game.cantstop;
 import com.crucible.playbook.common.game.AbstractSimpleTurnGame;
 import com.crucible.playbook.common.game.object.Dice;
 import com.crucible.playbook.common.persistence.AbstractGameData;
-import com.crucible.playbook.common.persistence.AbstractMoveData;
 import com.crucible.playbook.common.util.GameUtils;
+import com.crucible.playbook.common.util.PersistLevel;
 import com.crucible.playbook.game.cantstop.player.AbstractCantStopPlayer;
 import com.crucible.playbook.game.cantstop.object.CantStopBoard;
 import com.crucible.playbook.game.cantstop.persistence.CantStopGameData;
+import com.crucible.playbook.game.cantstop.persistence.CantStopMoveData;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,13 +28,17 @@ import java.util.logging.Logger;
  * @author exxod
  */
 public class CantStop extends AbstractSimpleTurnGame {
+
     public static final int MIN_PLAYERS = 2;
     public static final int MAX_PLAYERS = 4;
     protected CantStopBoard board;
+    private Collection<AbstractGameData> moveData;
+    private int moveNumber;
 
     @Override
     protected void setup() {
         board = new CantStopBoard(this.getPlayers().values());
+        moveData = new LinkedList();
     }
 
     @Override
@@ -58,8 +64,12 @@ public class CantStop extends AbstractSimpleTurnGame {
                     return false;
                 }
 
+                moveNumber++;
                 board.advanceTempMarkers(currentPlayer.getId(), columns);
                 continueTurn = currentPlayer.continueOrStop(board);
+                if (PersistLevel.MOVE.equals(this.getPersistLevel())) {
+                    addMoveData(currentPlayer.getId(), continueTurn, columns, dice);
+                }
             }
 
             if (this.display) {
@@ -80,6 +90,37 @@ public class CantStop extends AbstractSimpleTurnGame {
         victoryCheck();
 
         return true;
+    }
+
+    private void addMoveData(String playerId, boolean continueTurn, int[] columns, Collection<Dice> dice) {
+        int[] diceValues = GameUtils.getDiceValues(dice);
+
+        CantStopMoveData currMoveData = new CantStopMoveData();
+        currMoveData.setGameId(gameId);
+        currMoveData.setMoveId(UUID.randomUUID().toString());
+        currMoveData.setMoveNumber(this.getMoveNumber());
+        currMoveData.setTurnNumber(this.getTurnNumber());
+        currMoveData.setDie1Value(diceValues[0]);
+        currMoveData.setDie2Value(diceValues[1]);
+        currMoveData.setDie3Value(diceValues[2]);
+        currMoveData.setDie4Value(diceValues[3]);
+        if (columns.length >= 1) {
+            currMoveData.setAdvancedColumnA(columns[0]);
+        }
+        if (columns.length == 2) {
+            currMoveData.setAdvancedColumnB(columns[1]);
+        }
+        currMoveData.setWillContinue(continueTurn);
+
+        moveData.add(currMoveData);
+    }
+
+    public int getMoveNumber() {
+        return this.moveNumber;
+    }
+
+    public void setMoveNumber(int newMoveNumber) {
+        this.moveNumber = newMoveNumber;
     }
 
     /**
@@ -226,6 +267,11 @@ public class CantStop extends AbstractSimpleTurnGame {
         return gameData;
     }
 
+    @Override
+    public Collection<AbstractGameData> retrieveMoveData() {
+        return moveData;
+    }
+
     private Map<String, Integer> getPlaceResults() {
         Map<String, Integer> placeResults = new HashMap<>();
 
@@ -293,10 +339,5 @@ public class CantStop extends AbstractSimpleTurnGame {
     @Override
     public String getName() {
         return "Can't Stop";
-    }
-
-    @Override
-    public Collection<AbstractMoveData> retrieveMoveData() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -2,6 +2,8 @@ package com.crucible.playbook.console;
 
 import com.crucible.playbook.common.game.IGame;
 import com.crucible.playbook.common.game.player.IPlayer;
+import com.crucible.playbook.common.persistence.AbstractData;
+import com.crucible.playbook.common.persistence.AbstractGameData;
 import com.crucible.playbook.common.persistence.GameSession;
 import com.crucible.playbook.common.util.PersistLevel;
 import com.crucible.playbook.common.util.PersistenceUtils;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
@@ -129,7 +132,7 @@ public class Emulator {
         });
 
         int numberOfDraws = session.getNumberOfPlays();
-        Collection<Object> gameData = new LinkedList<>();
+        Collection<AbstractGameData> gameData = new LinkedList<>();
 
         for (int i = 0; i < session.getNumberOfPlays(); i++) {
             IGame game = (IGame) Class.forName(session.getGameName()).newInstance();
@@ -148,7 +151,7 @@ public class Emulator {
             if (PersistLevel.GAME.equals(persistLevel) || PersistLevel.MOVE.equals(persistLevel)) {
                 gameData.add(game.retrieveGameData());
             }
-            
+
             if (PersistLevel.MOVE.equals(persistLevel)) {
                 gameData.addAll(game.retrieveMoveData());
             }
@@ -183,14 +186,49 @@ public class Emulator {
             System.out.print("Saving game data... ");
             PersistenceUtils.persist(session);
             if (persistLevel != PersistLevel.SESSION) {
-                PersistenceUtils.persistAll(gameData);
+                int sessionsPersisted = 0;
+                Collection<Collection<AbstractData>> splitGameData = splitGameData(gameData);
+                for (Collection<AbstractData> gameDataSet : splitGameData) {
+                    PersistenceUtils.persistAll(gameDataSet, AbstractGameData.PERSISTENCE_UNIT);
+                    sessionsPersisted++;
+                    System.out.print("\r");
+                    int percentageComplete = 100 / splitGameData.size() * sessionsPersisted; 
+                    for (int j = 0; j < 10; j++) {
+                        if (j <= percentageComplete / 10) {
+                            System.out.print("*");
+                        } else {
+                            System.out.print(" ");
+                        }
+                    }
+                    System.out.print(" (" + percentageComplete + "%)"); //}
+                }
             }
+            System.out.println();
             System.out.println("saved");
             long persistEnd = System.currentTimeMillis();
             System.out.println("Persist completed in " + ((persistEnd - persistStart) / 1000.0) + " s");
         }
 
         return true;
+    }
+
+    private Collection<Collection<AbstractData>> splitGameData(Collection<AbstractGameData> gameData) {
+
+        Map<Integer, Collection<AbstractData>> splitGameData = new HashMap();
+
+        Iterator<AbstractGameData> iterator = gameData.iterator();
+
+        int element = 0;
+        while (iterator.hasNext()) {
+            int subCollectionIndex = element % 20;
+            if (splitGameData.get(subCollectionIndex) == null) {
+                splitGameData.put(subCollectionIndex, new LinkedList());
+            }
+            splitGameData.get(subCollectionIndex).add(iterator.next());
+            element++;
+        }
+
+        return splitGameData.values();
     }
 
     private void setupPlayers() throws InstantiationException, IllegalAccessException, ClassNotFoundException {

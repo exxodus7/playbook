@@ -2,7 +2,6 @@ package com.crucible.playbook.game.tictactoe;
 
 import com.crucible.playbook.common.game.AbstractSimpleTurnGame;
 import com.crucible.playbook.common.persistence.AbstractGameData;
-import com.crucible.playbook.common.persistence.AbstractMoveData;
 import com.crucible.playbook.game.tictactoe.object.TicTacToePlayerMarker;
 import com.crucible.playbook.game.tictactoe.object.TicTacToeSpace;
 import com.crucible.playbook.game.tictactoe.persistence.TicTacToeGameData;
@@ -29,7 +28,7 @@ public class TicTacToe extends AbstractSimpleTurnGame {
     private int moveCount = 0;
     private final TicTacToePlayerMarker[][] board = new TicTacToePlayerMarker[3][3];
     private Map<String, TicTacToePlayerMarker> playerAssignment;
-    private Collection<AbstractMoveData> moveData;
+    private Collection<AbstractGameData> moveData;
 
     /**
      * Sets up the game. Assigns player markers and determines turn order.
@@ -69,9 +68,10 @@ public class TicTacToe extends AbstractSimpleTurnGame {
         TicTacToeMoveData move = new TicTacToeMoveData();
         move.setGameId(gameId);
         move.setMoveId(UUID.randomUUID().toString());
+        move.setMoveNumber(moveCount);
         move.setPlayerId(getCurrentPlayerId());
-        move.setRow(moveLocation.getRow());
-        move.setCol(moveLocation.getColumn());
+        move.setBoardRow(moveLocation.getRow());
+        move.setBoardColumn(moveLocation.getColumn());
         
         moveData.add(move);
     }
@@ -226,7 +226,7 @@ public class TicTacToe extends AbstractSimpleTurnGame {
     }
     
     @Override
-    public Collection<AbstractMoveData> retrieveMoveData() {
+    public Collection<AbstractGameData> retrieveMoveData() {
         return moveData;
     }
 }

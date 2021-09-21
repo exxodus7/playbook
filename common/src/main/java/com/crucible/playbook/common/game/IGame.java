@@ -2,7 +2,6 @@ package com.crucible.playbook.common.game;
 
 import com.crucible.playbook.common.game.player.IPlayer;
 import com.crucible.playbook.common.persistence.AbstractGameData;
-import com.crucible.playbook.common.persistence.AbstractMoveData;
 import com.crucible.playbook.common.util.PersistLevel;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -118,5 +117,5 @@ public interface IGame {
 
     public AbstractGameData retrieveGameData();
     
-    public Collection<AbstractMoveData> retrieveMoveData();
+    public Collection<AbstractGameData> retrieveMoveData();
 }

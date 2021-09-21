@@ -5,9 +5,11 @@ package com.crucible.playbook.common.game;
  */
 public abstract class AbstractSimpleTurnGame extends AbstractGame {
 
+    private int turnNumber = 0;
+    
     @Override
     public boolean start() {
-
+                
         // Check for a correct number of players.
         if (this.getNumPlayers() < this.getMinNumPlayers()
                 || this.getNumPlayers() > this.getMaxNumPlayers()) {
@@ -22,6 +24,7 @@ public abstract class AbstractSimpleTurnGame extends AbstractGame {
         while (!this.isGameOver()) {
             for (String playerId : playerOrder) {
                 setCurrentPlayerId(playerId);
+                turnNumber++;
                 if (!playerTurn()) {
                     System.out.println(this.getPlayers().get(playerId).getName() + " (" + playerId + ") ran into a problem executing their turn.");
                     displayGameStateToConsole();
@@ -52,4 +55,11 @@ public abstract class AbstractSimpleTurnGame extends AbstractGame {
      */
     protected abstract boolean playerTurn();
 
+    public int getTurnNumber() {
+        return this.turnNumber;
+    }
+    
+    public void setTurnNumber(Integer newTurnNumber) {
+        this.turnNumber = newTurnNumber;
+    }
 }

@@ -21,14 +21,14 @@ import jakarta.xml.bind.annotation.XmlRootElement;
  * @author lauren
  */
 @Entity
-@Table(name = "GAME_SESSION", schema = "APP")
+@Table(name = "GAMESESSION", schema = "APP")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "GameSession.findAll", query = "SELECT s FROM GameSession s"),
     @NamedQuery(name = "GameSession.findBySessionId", query = "SELECT s FROM GameSession s WHERE s.sessionId = :sessionId"),
     @NamedQuery(name = "GameSession.findByGameName", query = "SELECT s FROM GameSession s WHERE s.gameName = :gameName"),
     @NamedQuery(name = "GameSession.findByNumberOfPlays", query = "SELECT s FROM GameSession s WHERE s.numberOfPlays = :numberOfPlays")})
-public class GameSession implements Serializable {
+public class GameSession extends AbstractGeneralData implements Serializable {
 
     @Column(name = "NUMBER_OF_PLAYS")
     private Integer numberOfPlays;
@@ -44,8 +44,6 @@ public class GameSession implements Serializable {
     @Lob
     @Column(name = "DESCRIPTION")
     private String description;
-
-    private static final String PERSISTENCE_UNIT = "GameDataPU";
 
     public GameSession() {
         this.sessionId = UUID.randomUUID().toString();

@@ -21,7 +21,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
  * @author lauren
  */
 @Entity
-@Table(name = "GAMEDATA_TICTACTOE", schema = "APP")
+@Table(name = "TICTACTOE_GAMEDATA", schema = "APP")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TicTacToeGameData.findAll", query = "SELECT t FROM TicTacToeGameData t"),
@@ -140,7 +140,7 @@ public class TicTacToeGameData extends AbstractGameData implements Serializable 
 
     @Override
     public String toString() {
-        return "com.crucible.playbook.tictactoe.persistence.TicTacToeGameData[ gameId=" + gameId + " ]";
+        return "com.crucible.playbook.game.tictactoe.persistence.TicTacToeGameData[ gameId=" + gameId + " ]";
     }
 
 }
